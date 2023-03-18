@@ -159,8 +159,31 @@ public class Game {
 		return moves;
 	}
 
+	/**
+	 * Check to see if either player has won.
+	 * @return Optional.of(BLACK) if black has won, and Optional.of(WHITE) if white has won.
+	 * If the game has not ended or if a tie has occurred, return Optional.empty().
+	 */
 	public Optional<Player> checkWin() {
-		throw new UnsupportedOperationException("Not yet implemented.");
+		int numBlack = 0;
+		int numWhite = 0;
+		for (int i = 0; i < this.boardSize; i++) {
+			for (int j = 0; j < this.boardSize; j++) {
+				if (this.board[i][j] == Square.BLACK) {
+					numBlack++;
+				}
+				else if (this.board[i][j] == Square.WHITE) {
+					numWhite++;
+				}
+				else {
+					return Optional.empty();
+				}
+			}
+		}
+		if (numBlack == numWhite) {
+			return Optional.empty();
+		}
+		return Optional.of(numBlack < numWhite ? Player.BLACK : Player.WHITE);
 	}
 	
 	/** 
