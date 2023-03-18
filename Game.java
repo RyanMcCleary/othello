@@ -24,7 +24,7 @@ public class Game {
 		this(8);
 	}
 	
-    void setSquare(int row, int col, Square s) {
+	void setSquare(int row, int col, Square s) {
 		this.board[row][col] = s;
 	}
 	
@@ -32,7 +32,7 @@ public class Game {
 		return this.board[row][col];
 	}
 
-    boolean flipPiecesInDirection(int row, int col, int rowDelta, int colDelta) {
+	boolean flipPiecesInDirection(int row, int col, int rowDelta, int colDelta) {
 		if (!isValidDirection(row, col, rowDelta, colDelta)) {
 			return false;
 		}
@@ -124,7 +124,8 @@ public class Game {
 		return (0 <= row && row < this.boardSize 
 				&& 0 <= col && col < this.boardSize);
 	}
-    boolean makeMove(int row, int col) {
+
+	boolean makeMove(int row, int col) {
 		boolean validMove = false;
 		for (int rowDelta = -1; rowDelta <= 1; rowDelta++) {
 			for (int colDelta = -1; colDelta <= 1; colDelta++) {
