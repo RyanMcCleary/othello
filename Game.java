@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Optional;
 
 public class Game {
 	private Square[][] board;
@@ -154,6 +155,10 @@ public class Game {
 			
 		}
 		return moves;
+	}
+
+	public Optional<Player> checkWin() {
+		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 	
 	/** 
