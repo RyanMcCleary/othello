@@ -30,3 +30,11 @@ move from that position is an arm, and the payoff is 1 if that move leads to a w
 If these lecture notes are unclear at first, you can also read [a previous set of notes](https://ieor8100.github.io/mab/Lecture%202.pdf)
 from the same course introducing multi-armed bandits, and [the Wikipedia article](https://en.wikipedia.org/wiki/Multi-armed_bandit).
 
+We will also need to think about how exactly the game tree will be represented.
+One possible representation is using a [bitboard](https://www.chessprogramming.org/Bitboards).
+We may not do this immediately in our first version, but it will be something to look into
+when we start to optimize.
+[This article](https://en.wikipedia.org/wiki/Board_representation_(computer_chess)) about board representations in chess could also be useful.
+There is not as much information online about computer othello as there is on computer chess, but there is
+[an article on the Chess Programming Wiki](https://www.chessprogramming.org/Othello) which might be a good read.
+
