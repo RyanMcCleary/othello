@@ -32,7 +32,7 @@ To represent the game tree, we will need the following two classes:
      This will be used to keep track of an empirical estimate of how good the position specified by this node is.
      Finally, the GameTreeNode will also need a field numVisits of type int, in order to keep track of the number
      of times any given node has been visited in the MCTS algorithm. 
-  2. GameTree: this class should contain an field of type Game, along with an ArrayList<GameTreeNode> of moves from this position.
+  2. GameTree: this class should contain a field of type Game, along with an ArrayList<GameTreeNode> of moves from this position.
      This class is essentially meant to wrap the game tree. The reason we need it is to prevent every node in the game tree from holding an 8x8 board.
 
 We will also need appropriate accessor and convenience methods, of course. For example, we might want a method update(double reward) which updates the
