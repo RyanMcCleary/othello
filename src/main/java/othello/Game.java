@@ -11,7 +11,7 @@ public class Game {
 	
 	
 	public Game(int n) {
-		this.currentPlayer = Player.WHITE;
+		this.currentPlayer = Player.WHITE; // May need to be changed to black, since black goes first
 		this.board = new Square[n][n];
 		this.boardSize = n;
 		for (int row = 0; row < n; row++) {
@@ -27,14 +27,19 @@ public class Game {
 		this(8);
 	}
 	
+	// Perhaps add access modifier
 	void setSquare(int row, int col, Square s) {
 		this.board[row][col] = s;
 	}
 	
+	// Perhaps add access modifier
 	Square getSquare(int row, int col) {
 		return this.board[row][col];
 	}
 
+	// Input a square's location and a direction, flip pieces in that direction if possible and return true, otherwise return false
+	// rowDelta == 1 && colDelta == 0 implies the direction is right
+	// rowDelta == -1 && colDelta == -1 implies the direction is up-left, etc.
 	boolean flipPiecesInDirection(int row, int col, int rowDelta, int colDelta) {
 		if (!isValidDirection(row, col, rowDelta, colDelta)) {
 			return false;
@@ -50,6 +55,7 @@ public class Game {
 		return true;
 	}	
 	
+	// Perhaps add access modifier
 	Player switchPlayer() {
 		if (this.currentPlayer == Player.WHITE)
 			this.currentPlayer = Player.BLACK;
@@ -73,6 +79,7 @@ public class Game {
 		}
 	}
 	
+	// Perhaps rename getCurrentPlayer for consistency
 	public Square currentColor() {
 		if (this.currentPlayer == Player.BLACK) {
 			return Square.BLACK;
@@ -82,6 +89,7 @@ public class Game {
 		}
 	}
 	
+	// Perhaps rename getOppositePlayer for consistency
 	public Square oppositeColor() {
 		if (this.currentPlayer == Player.BLACK) {
 			return Square.WHITE;
@@ -112,7 +120,11 @@ public class Game {
 		}
 	}
 	
+	// A square can be played in if it is empty and placing a disk in it results in the capture of at least one of the opponent's pieces
 	public boolean isValidMove(int row, int col) {
+		if (this.board[row][col] != Square.EMPTY) {
+			return false;
+		}
 		for (int rowDelta = -1; rowDelta <= 1; rowDelta++) {
 			for (int colDelta = -1; colDelta <= 1; colDelta++) {
 				if (!(rowDelta == 0 && colDelta == 0) && isValidDirection(row, col, rowDelta, colDelta)) {
@@ -123,11 +135,13 @@ public class Game {
 		return false;
 	}
 	
+	// Perhaps rename isInBounds for consistency
 	public boolean inBounds(int row, int col) {
 		return (0 <= row && row < this.boardSize 
 				&& 0 <= col && col < this.boardSize);
 	}
 
+	// Perhaps add access modifier
 	boolean makeMove(int row, int col) {
 		boolean validMove = false;
 		for (int rowDelta = -1; rowDelta <= 1; rowDelta++) {
