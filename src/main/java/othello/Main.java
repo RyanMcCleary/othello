@@ -1,6 +1,5 @@
 package othello;
 
-
 public class Main {
 
 	public static void main(String[] args) {
@@ -10,7 +9,7 @@ public class Main {
 		game.switchPlayer();
 		game.makeMove(5,4);
 		game.switchPlayer();
-		System.out.println(game.currentColor());
+		System.out.println(game.getCurrentColor());
 		System.out.println(game.isValidDirection(4, 5, 0, -1));
 		//System.out.println(game.makeMove(4, 5));
 		game.printBoard();

@@ -9,9 +9,8 @@ public class Game {
 	private Player currentPlayer;
 	private int boardSize;
 	
-	
 	public Game(int n) {
-		this.currentPlayer = Player.WHITE; // May need to be changed to black, since black goes first
+		this.currentPlayer = Player.BLACK;
 		this.board = new Square[n][n];
 		this.boardSize = n;
 		for (int row = 0; row < n; row++) {
@@ -27,38 +26,36 @@ public class Game {
 		this(8);
 	}
 	
-	// Perhaps add access modifier
-	void setSquare(int row, int col, Square s) {
+	public void setSquare(int row, int col, Square s) {
 		this.board[row][col] = s;
 	}
 	
-	// Perhaps add access modifier
-	Square getSquare(int row, int col) {
+	public Square getSquare(int row, int col) {
 		return this.board[row][col];
 	}
 
 	// Input a square's location and a direction, flip pieces in that direction if possible and return true, otherwise return false
 	// rowDelta == 1 && colDelta == 0 implies the direction is right
 	// rowDelta == -1 && colDelta == -1 implies the direction is up-left, etc.
-	boolean flipPiecesInDirection(int row, int col, int rowDelta, int colDelta) {
+	public boolean flipPiecesInDirection(int row, int col, int rowDelta, int colDelta) {
 		if (!isValidDirection(row, col, rowDelta, colDelta)) {
 			return false;
 		}
 		System.out.printf("flipPiecesInDirection(%d, %d, %d, %d)\n", row, col, rowDelta, colDelta);
 		row += rowDelta;
 		col += colDelta;
-		while (inBounds(row, col) && this.board[row][col] == oppositeColor()) {
-			setSquare(row, col, currentColor());
+		while (isInBounds(row, col) && this.board[row][col] == getOppositeColor()) {
+			setSquare(row, col, getCurrentColor());
 			row += rowDelta;
 			col += colDelta;
 		}
 		return true;
 	}	
 	
-	// Perhaps add access modifier
-	Player switchPlayer() {
-		if (this.currentPlayer == Player.WHITE)
+	public Player switchPlayer() {
+		if (this.currentPlayer == Player.WHITE) {
 			this.currentPlayer = Player.BLACK;
+		}
 		else {
 			this.currentPlayer = Player.WHITE;
 		}
@@ -69,18 +66,21 @@ public class Game {
 	public void printBoard() {
 		for(int row = 0; row < this.boardSize; row++) {
 			for(int col =0; col < this.boardSize; col++) {
-				if(this.board[row][col] == Square.WHITE)
+				if(this.board[row][col] == Square.WHITE) {
 						System.out.print("W");
-				else if	(this.board[row][col] == Square.BLACK)
+				}
+				else if	(this.board[row][col] == Square.BLACK) {
 						System.out.print("B");
-				else System.out.print("*");
-			}
+				}
+				else {
+					System.out.print("*");
+				}
 			System.out.println();
+			}
 		}
 	}
-	
-	// Perhaps rename getCurrentPlayer for consistency
-	public Square currentColor() {
+
+	public Square getCurrentColor() {
 		if (this.currentPlayer == Player.BLACK) {
 			return Square.BLACK;
 		}
@@ -89,8 +89,7 @@ public class Game {
 		}
 	}
 	
-	// Perhaps rename getOppositePlayer for consistency
-	public Square oppositeColor() {
+	public Square getOppositeColor() {
 		if (this.currentPlayer == Player.BLACK) {
 			return Square.WHITE;
 		}
@@ -100,19 +99,19 @@ public class Game {
 	}
 	
 	public boolean isValidDirection(int row, int col, int rowDelta, int colDelta) {
-		if (!inBounds(row, col) || !inBounds(row + rowDelta, col + colDelta)) {
+		if (!isInBounds(row, col) || !isInBounds(row + rowDelta, col + colDelta)) {
 			return false;
 		}
-		if (this.board[row + rowDelta][col + colDelta] != oppositeColor()) {
+		if (this.board[row + rowDelta][col + colDelta] != getOppositeColor()) {
 			return false;
 		}
 		row += rowDelta;
 		col += colDelta;
-		while (inBounds(row, col) && this.board[row][col] == oppositeColor()) {
+		while (isInBounds(row, col) && this.board[row][col] == getOppositeColor()) {
 			row += rowDelta;
 			col += colDelta;
 		}
-		if (inBounds(row, col) && this.board[row][col] == currentColor()) {
+		if (isInBounds(row, col) && this.board[row][col] == getCurrentColor()) {
 			return true;
 		}
 		else {
@@ -135,14 +134,12 @@ public class Game {
 		return false;
 	}
 	
-	// Perhaps rename isInBounds for consistency
-	public boolean inBounds(int row, int col) {
+	public boolean isInBounds(int row, int col) {
 		return (0 <= row && row < this.boardSize 
 				&& 0 <= col && col < this.boardSize);
 	}
 
-	// Perhaps add access modifier
-	boolean makeMove(int row, int col) {
+	public boolean makeMove(int row, int col) {
 		boolean validMove = false;
 		for (int rowDelta = -1; rowDelta <= 1; rowDelta++) {
 			for (int colDelta = -1; colDelta <= 1; colDelta++) {
@@ -152,7 +149,7 @@ public class Game {
 			}
 		}
 		if (validMove) {
-			setSquare(row, col, currentColor());
+			setSquare(row, col, getCurrentColor());
 		}
 		return validMove;
 	}	
@@ -165,8 +162,9 @@ public class Game {
 		ArrayList<SquareIndex> moves = new ArrayList<>();	
 		for(int i = 0; i < boardSize; i++)  {
 			for(int j = 0; j < boardSize; j++)  {
-				if(isValidMove(i, j))
+				if(isValidMove(i, j)) {
 					moves.add(new SquareIndex(i, j));
+				}
 			}
 			
 		}
