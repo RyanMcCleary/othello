@@ -16,6 +16,28 @@ Run this command from the project's root directory (othello).
 After building, you can use the command './gradlew run' (or 'gradlew run' on Windows) 
 to run the project.
 
+## Game Tree
+
+We will store the current board position in the root of the game tree, along with a tree
+structure in which each node represents a possible move. These nodes will not need to store 
+the state of the game at that point, since it can be reconstructed from the state stored in
+the root and the sequence of moves stored in the tree up to a given node. 
+
+To represent the game tree, we will need the following two classes:
+  1. GameTreeNode: this class represents a move made in the game leading to a new game state.
+     This class should contain a field specifying a move (of type SquareIndex), along with 
+     a field of type ArrayList<GameTreeNode> for the children of this node. If a node has no
+     children, this ArrayList will be empty. 
+     Additionally, the GameTreeNode class should have a field called empiricalReward of type double.
+     This will be used to keep track of an empirical estimate of how good the position specified by this node is.
+     Finally, the GameTreeNode will also need a field numVisits of type int, in order to keep track of the number
+     of times any given node has been visited in the MCTS algorithm. 
+  2. GameTree: this class should contain an field of type Game, along with an ArrayList<GameTreeNode> of moves from this position.
+     This class is essentially meant to wrap the game tree. The reason we need it is to prevent every node in the game tree from holding an 8x8 board.
+
+We will also need appropriate accessor and convenience methods, of course. For example, we might want a method update(double reward) which updates the
+empiricalReward and numVisits fields appropriately whenever this node is visited. 
+
 ## Useful Resources
 
 To get started with the Monte Carlo Tree Search (MCTS) algorithm, have a look at
