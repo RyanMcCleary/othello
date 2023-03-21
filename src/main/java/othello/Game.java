@@ -176,7 +176,12 @@ public class Game {
 	 * @return Optional.of(BLACK) if black has won, and Optional.of(WHITE) if white has won.
 	 * If the game has not ended or if a tie has occurred, return Optional.empty().
 	 */
-	public Optional<Player> checkWin() {
+	
+	/*
+	 *  This function determines if the game is in progress, is a tie, or 
+	 *  if one of the players won. 
+	 */
+	public GameResult checkWin() {
 		int numBlack = 0;
 		int numWhite = 0;
 		for (int i = 0; i < this.boardSize; i++) {
@@ -187,15 +192,24 @@ public class Game {
 				else if (this.board[i][j] == Square.WHITE) {
 					numWhite++;
 				}
-				else {
-					return Optional.empty();
-				}
 			}
 		}
-		if (numBlack == numWhite) {
-			return Optional.empty();
+		if((numWhite + numBlack) < (this.boardSize)*(this.boardSize)) {
+			return GameResult.IN_PROGRESS;
+		}	
+		if(numWhite == 0) {
+			return GameResult.BLACK_WIN;
 		}
-		return Optional.of(numBlack < numWhite ? Player.BLACK : Player.WHITE);
+		if(numBlack == 0) {
+			return GameResult.WHITE_WIN;
+		}
+		if (numBlack < numWhite) {
+			return GameResult.WHITE_WIN;
+		}
+		if (numWhite < numBlack) {
+			return GameResult.BLACK_WIN;
+		}
+		return GameResult.TIE;
 	}
 	
 	/** 
@@ -206,7 +220,8 @@ public class Game {
 	/*public takeTurn(Player player)  {
 		
 	}*/
-	/*public Player playRandomGame()  {
 	
-	}*/
+	
+	/*public Player playRandomGame()  
+	*/
 }
