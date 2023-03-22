@@ -1,8 +1,15 @@
 package othello;
 
+import javax.swing.JFrame;
+
 public class Main {
 
 	public static void main(String[] args) {
+        
+        OthelloUI ui = new OthelloUI();
+        ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ui.setVisible(true);
+        
 		Game game = new Game();
 		
 		game.makeMove(4,2);
