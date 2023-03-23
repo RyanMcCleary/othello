@@ -3,3 +3,12 @@ apply plugin: 'application'
 
 mainClassName = 'othello.Main'
 
+application {
+  mainClass = 'othello.Main'
+}
+
+jar {
+  manifest {
+    attributes 'Main-Class': application.mainClass
+  }
+}

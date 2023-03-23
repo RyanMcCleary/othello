@@ -16,7 +16,22 @@ public class OthelloUI extends JFrame {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 final int i_ = i, j_ = j;
-                JButton square = new JButton("*");
+                JButton square = new JButton() {
+                    
+                    @Override
+                    public void paintComponent(Graphics g) {
+                        super.paintComponent(g);
+                        if (i_ % 2 == 0) {
+                            g.setColor(Color.BLACK);
+                        }
+                        else {
+                            g.setColor(Color.WHITE);
+                        }
+                        g.fillOval(1, 1, getWidth() - 1, getHeight() - 1);
+                    }
+                    
+                };
+                square.setBackground(new Color(0x40, 0x53, 0x36));
                 square.addActionListener(new ActionListener() {
                     
                     @Override
