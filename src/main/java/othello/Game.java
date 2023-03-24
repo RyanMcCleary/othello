@@ -1,8 +1,8 @@
 package othello;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Optional;
+// import java.util.Random;
+// import java.util.Optional;
 
 public class Game {
 	private Square[][] board;
@@ -160,13 +160,12 @@ public class Game {
 	 */
 	public ArrayList<SquareIndex> movesList()  {
 		ArrayList<SquareIndex> moves = new ArrayList<>();	
-		for(int i = 0; i < boardSize; i++)  {
-			for(int j = 0; j < boardSize; j++)  {
+		for(int i = 0; i < boardSize; i++) {
+			for(int j = 0; j < boardSize; j++) {
 				if(isValidMove(i, j)) {
 					moves.add(new SquareIndex(i, j));
 				}
 			}
-			
 		}
 		return moves;
 	}
@@ -194,22 +193,27 @@ public class Game {
 				}
 			}
 		}
-		if((numWhite + numBlack) < (this.boardSize)*(this.boardSize)) {
+		if(movesList().isEmpty()) {
+			switchPlayer();
+			if(movesList().isEmpty()) {
+				if(numBlack == numWhite) {
+					return GameResult.TIE;
+				}
+				else if(numBlack > numWhite) {
+					return GameResult.BLACK_WIN;
+				}
+				else {
+					return GameResult.WHITE_WIN;
+				}
+			}
+			else {
+				switchPlayer();
+				return GameResult.IN_PROGRESS;
+			}
+		}
+		else {
 			return GameResult.IN_PROGRESS;
-		}	
-		if(numWhite == 0) {
-			return GameResult.BLACK_WIN;
 		}
-		if(numBlack == 0) {
-			return GameResult.WHITE_WIN;
-		}
-		if (numBlack < numWhite) {
-			return GameResult.WHITE_WIN;
-		}
-		if (numWhite < numBlack) {
-			return GameResult.BLACK_WIN;
-		}
-		return GameResult.TIE;
 	}
 	
 	/** 
