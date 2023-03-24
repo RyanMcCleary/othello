@@ -5,23 +5,23 @@ import java.awt.*;
 
 class OthelloSquareButton extends JButton {
     
-    private Square squareState;
+    private Game gameState;
+    private int row;
+    private int col;
     
-    public OthelloSquareButton() {
-        this.squareState = Square.EMPTY;
-    }
-    
-    public void setState(Square squareState) {
-        this.squareState = squareState;
+    public OthelloSquareButton(int row, int col, Game g) {
+        this.gameState = g;
+        this.row = row;
+        this.col = col;
     }
     
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (this.squareState == Square.EMPTY) {
+        if (this.gameState.getSquare(row, col) == Square.EMPTY) {
             return;
         }
-        else if (this.squareState == Square.BLACK) {
+        else if (this.gameState.getSquare(row, col) == Square.BLACK) {
             g.setColor(Color.BLACK);
         }
         else {
