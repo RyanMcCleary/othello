@@ -6,6 +6,8 @@ import java.awt.event.*;
 
 public class OthelloUI extends JFrame {
         
+    Square currentColor = Square.BLACK;
+        
     public OthelloUI() {
         super("Othello");
         initializeComponents();
@@ -15,28 +17,22 @@ public class OthelloUI extends JFrame {
         getContentPane().setLayout(new GridLayout(0, 8));
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                final int i_ = i, j_ = j;
-                JButton square = new JButton() {
-                    
-                    @Override
-                    public void paintComponent(Graphics g) {
-                        super.paintComponent(g);
-                        if (i_ % 2 == 0) {
-                            g.setColor(Color.BLACK);
-                        }
-                        else {
-                            g.setColor(Color.WHITE);
-                        }
-                        g.fillOval(1, 1, getWidth() - 1, getHeight() - 1);
-                    }
-                    
-                };
+                OthelloSquareButton square = new OthelloSquareButton();
                 square.setBackground(new Color(0x40, 0x53, 0x36));
+                square.setMargin(new Insets(0, 0, 0, 0));
+                square.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 square.addActionListener(new ActionListener() {
                     
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        JOptionPane.showMessageDialog(getContentPane(), "Square (" + i_ + ", " + j_ + ") pressed!");
+                        square.setState(currentColor);
+                        square.repaint();
+                        if (currentColor == Square.BLACK) {
+                            currentColor = Square.WHITE;
+                        }
+                        else {
+                            currentColor = Square.BLACK;
+                        }
                     }
                     
                 });
