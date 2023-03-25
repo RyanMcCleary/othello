@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 public class Main {
 
 	public static void main(String[] args) {
-        /*
+        
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
         
             @Override
@@ -15,9 +15,10 @@ public class Main {
                 ui.setVisible(true);
             }
         });
-        */
+        /*
 		Game othello = new Game("boardconfiguration.txt");
 		othello.printBoard();
+		*/
 	}
 
 }

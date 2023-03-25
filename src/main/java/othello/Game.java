@@ -173,9 +173,7 @@ public class Game {
 		for (int rowDelta = -1; rowDelta <= 1; rowDelta++) {
 			for (int colDelta = -1; colDelta <= 1; colDelta++) {
 				if (!(rowDelta == 0 && colDelta == 0)) {
-					if (flipPiecesInDirection(row, col, rowDelta, colDelta)) {
-                        validMove = true;
-                    }
+					validMove = validMove || flipPiecesInDirection(row, col, rowDelta, colDelta);
 				}
 			}
 		}
