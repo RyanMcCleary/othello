@@ -68,6 +68,9 @@ There is not as much information online about computer othello as there is on co
   4. Implement the expand() method in MCTSAgent.
   5. Implement the selectChildUCB() method in MCTSAgent.
   6. Set up the UI so that the board is always square (currently, the squares become rectangles when the board is resized, and the pieces become ovals. This results in a rather ugly look when the window is maximized.
-  7. Move the makeRandomMove() function from Game to MCTSAgent.
-  8. Make subpackages: we need one package for the representation/move evaluation (containing Game, MCTSAgent, etc), and another package for the UI. These packages could be called "othello.core" and "othello.ui", or something similar. 
-  9. Load a board state in from a file.
+  7. Add a UI component to display the current player.
+  8. Move the makeRandomMove() function from Game to MCTSAgent.
+  9. Make subpackages: we need one package for the representation/move evaluation (containing Game, MCTSAgent, etc), and another package for the UI. These packages could be called "othello.core" and "othello.ui", or something similar. 
+  10. Load a board state in from a file.
+  11. Add unit tests (using JUnit). 
+
