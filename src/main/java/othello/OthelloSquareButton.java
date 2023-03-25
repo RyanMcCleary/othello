@@ -5,11 +5,11 @@ import java.awt.*;
 
 class OthelloSquareButton extends JButton {
     
-    private Game gameState;
+    private GameState gameState;
     private int row;
     private int col;
     
-    public OthelloSquareButton(int row, int col, Game g) {
+    public OthelloSquareButton(int row, int col, GameState g) {
         this.gameState = g;
         this.row = row;
         this.col = col;

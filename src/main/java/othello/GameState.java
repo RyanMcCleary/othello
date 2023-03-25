@@ -8,34 +8,31 @@ import java.lang.String;
 import java.io.FileNotFoundException;
 // import java.util.Optional;
 
-public class Game {
+public class GameState {
 	private Square[][] board;
 	private Player currentPlayer;
-	private int boardSize;
 	
-	public Game(int n) {
+	public GameState() {
 		this.currentPlayer = Player.BLACK;
-		this.board = new Square[n][n];
-		this.boardSize = n;
-		for (int row = 0; row < n; row++) {
-			for (int col = 0; col < n; col++) {
+		this.board = new Square[8][8];
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
 				board[row][col] = Square.EMPTY;
 			}
 		}
-		this.board[n / 2 - 1][n /                                                                                                                                 2 - 1] = this.board[n / 2][n / 2] = Square.WHITE;
-		this.board[n / 2 - 1][n / 2] = this.board[n / 2][n / 2 - 1] = Square.BLACK;
+		this.board[3][3] = this.board[4][4] = Square.WHITE;
+		this.board[3][4] = this.board[4][3] = Square.BLACK;
 	}
 	
-	public Game(String filename) throws FileNotFoundException {
+	public GameState(String filename) throws FileNotFoundException {
 		this.currentPlayer = Player.BLACK;
 		this.board = new Square[8][8];
-		this.boardSize = 8;
 		Scanner scanner = new Scanner(new File(filename));
 		String line = "";
 		while (scanner.hasNextLine()) {
 			line = scanner.nextLine();
 			int i=0;
-			for(int j=0; j<line.length(); j++) { 
+			for (int j=0; j<line.length(); j++) { 
 				if (line.charAt(j) == '*') {
 					this.board[i][j] = Square.EMPTY;
 				}
@@ -45,14 +42,9 @@ public class Game {
 				else {
 					this.board[i][j] = Square.BLACK;
 				}
-						
 			} 
 			i++;
 		} 
-	}
-	
-	public Game() {
-		this(8);
 	}
 	
 	public void setSquare(int row, int col, Square s) {
@@ -62,24 +54,6 @@ public class Game {
 	public Square getSquare(int row, int col) {
 		return this.board[row][col];
 	}
-
-	// Input a square's location and a direction, flip pieces in that direction if possible and return true, otherwise return false
-	// rowDelta == 1 && colDelta == 0 implies the direction is right
-	// rowDelta == -1 && colDelta == -1 implies the direction is up-left, etc.
-	public boolean flipPiecesInDirection(int row, int col, int rowDelta, int colDelta) {
-		if (!isValidDirection(row, col, rowDelta, colDelta)) {
-			return false;
-		}
-		System.out.printf("flipPiecesInDirection(%d, %d, %d, %d)\n", row, col, rowDelta, colDelta);
-		row += rowDelta;
-		col += colDelta;
-		while (isInBounds(row, col) && this.board[row][col] == getOppositeColor()) {
-			setSquare(row, col, getCurrentColor());
-			row += rowDelta;
-			col += colDelta;
-		}
-		return true;
-	}	
 	
 	public Player switchPlayer() {
 		if (this.currentPlayer == Player.WHITE) {
@@ -89,24 +63,6 @@ public class Game {
 			this.currentPlayer = Player.WHITE;
 		}
 		return currentPlayer;
-	}
-	
-	// Prints board state
-	public void printBoard() {
-		for(int row = 0; row < this.boardSize; row++) {
-			for(int col =0; col < this.boardSize; col++) {
-				if(this.board[row][col] == Square.WHITE) {
-						System.out.print("W");
-				}
-				else if	(this.board[row][col] == Square.BLACK) {
-						System.out.print("B");
-				}
-				else {
-					System.out.print("*");
-				}
-			System.out.println();
-			}
-		}
 	}
 
 	public Square getCurrentColor() {
@@ -126,6 +82,26 @@ public class Game {
 			return Square.BLACK;
 		}
 	}
+
+	/* 
+	 * Input a square's location and a direction, flip pieces in that direction if possible and return true, otherwise return false
+	 * rowDelta == 1 && colDelta == 0 implies the direction is right
+	 * rowDelta == -1 && colDelta == -1 implies the direction is up-left, etc. 
+	 */
+	public boolean flipPiecesInDirection(int row, int col, int rowDelta, int colDelta) {
+		if (!isValidDirection(row, col, rowDelta, colDelta)) {
+			return false;
+		}
+		System.out.printf("flipPiecesInDirection(%d, %d, %d, %d)\n", row, col, rowDelta, colDelta);
+		row += rowDelta;
+		col += colDelta;
+		while (isInBounds(row, col) && this.board[row][col] == getOppositeColor()) {
+			setSquare(row, col, getCurrentColor());
+			row += rowDelta;
+			col += colDelta;
+		}
+		return true;
+	}	
 	
 	public boolean isValidDirection(int row, int col, int rowDelta, int colDelta) {
 		if (!isInBounds(row, col) || !isInBounds(row + rowDelta, col + colDelta)) {
@@ -147,8 +123,9 @@ public class Game {
 			return false;
 		}
 	}
-	
-	// A square can be played in if it is empty and placing a disk in it results in the capture of at least one of the opponent's pieces
+	/*
+	 * A square can be played in if it is empty and placing a disk in it results in the capture of at least one of the opponent's pieces
+	 */
 	public boolean isValidMove(int row, int col) {
 		if (this.board[row][col] != Square.EMPTY) {
 			return false;
@@ -164,8 +141,7 @@ public class Game {
 	}
 	
 	public boolean isInBounds(int row, int col) {
-		return (0 <= row && row < this.boardSize 
-				&& 0 <= col && col < this.boardSize);
+		return (0 <= row && row < 8 && 0 <= col && col < 8);
 	}
 
 	public boolean makeMove(int row, int col) {
@@ -183,39 +159,31 @@ public class Game {
 			setSquare(row, col, getCurrentColor());
 		}
 		return validMove;
-	}	
+	}
 	
-	/**
-	 *  This function returns an ArrayList of Pair objects corresponding
-	 *  to all of the valid moves.
+	/*
+	 *  This function returns an ArrayList of Pair objects corresponding to all of the valid moves.
 	 */
-	public ArrayList<SquareIndex> movesList()  {
+	public ArrayList<SquareIndex> movesList() {
 		ArrayList<SquareIndex> moves = new ArrayList<>();	
-		for(int i = 0; i < boardSize; i++) {
-			for(int j = 0; j < boardSize; j++) {
-				if(isValidMove(i, j)) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (isValidMove(i, j)) {
 					moves.add(new SquareIndex(i, j));
 				}
 			}
 		}
 		return moves;
 	}
-
-	/**
-	 * Check to see if either player has won.
-	 * @return Optional.of(BLACK) if black has won, and Optional.of(WHITE) if white has won.
-	 * If the game has not ended or if a tie has occurred, return Optional.empty().
-	 */
 	
 	/*
-	 *  This function determines if the game is in progress, is a tie, or 
-	 *  if one of the players won. 
+	 *  This function determines if the game is in progress, is a tie, or if one of the players won. 
 	 */
 	public GameResult checkWin() {
 		int numBlack = 0;
 		int numWhite = 0;
-		for (int i = 0; i < this.boardSize; i++) {
-			for (int j = 0; j < this.boardSize; j++) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				if (this.board[i][j] == Square.BLACK) {
 					numBlack++;
 				}
@@ -244,6 +212,24 @@ public class Game {
 		}
 		else {
 			return GameResult.IN_PROGRESS;
+		}
+	}
+
+	// Prints board state
+	public void printBoard() {
+		for(int row = 0; row < 8; row++) {
+			for(int col =0; col < 8; col++) {
+				if(this.board[row][col] == Square.WHITE) {
+						System.out.print("W");
+				}
+				else if	(this.board[row][col] == Square.BLACK) {
+						System.out.print("B");
+				}
+				else {
+					System.out.print("*");
+				}
+			System.out.println();
+			}
 		}
 	}
 	

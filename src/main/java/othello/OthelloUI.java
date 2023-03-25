@@ -6,11 +6,11 @@ import java.awt.event.*;
 
 public class OthelloUI extends JFrame {
         
-    private Game gameState;
+    private GameState gameState;
         
     public OthelloUI() {
         super("Othello");
-        this.gameState = new Game(8);
+        this.gameState = new GameState();
         initializeComponents();
     }
     
