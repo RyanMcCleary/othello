@@ -1,7 +1,11 @@
 package othello;
 
 import java.util.ArrayList;
-// import java.util.Random;
+import java.util.Scanner;
+import java.io.File;
+import java.util.Random;
+import java.lang.String;
+import java.io.FileNotFoundException;
 // import java.util.Optional;
 
 public class Game {
@@ -18,8 +22,33 @@ public class Game {
 				board[row][col] = Square.EMPTY;
 			}
 		}
-		this.board[n / 2 - 1][n / 2 - 1] = this.board[n / 2][n / 2] = Square.WHITE;
+		this.board[n / 2 - 1][n /                                                                                                                                 2 - 1] = this.board[n / 2][n / 2] = Square.WHITE;
 		this.board[n / 2 - 1][n / 2] = this.board[n / 2][n / 2 - 1] = Square.BLACK;
+	}
+	
+	public Game(String filename) throws FileNotFoundException {
+		this.currentPlayer = Player.BLACK;
+		this.board = new Square[8][8];
+		this.boardSize = 8;
+		Scanner scanner = new Scanner(new File(filename));
+		String line = "";
+		while (scanner.hasNextLine()) {
+			line = scanner.nextLine();
+			int i=0;
+			for(int j=0; j<line.length(); j++) { 
+				if (line.charAt(j) == '*') {
+					this.board[i][j] = Square.EMPTY;
+				}
+				else if (line.charAt(j) == 'W') {
+					this.board[i][j] = Square.WHITE;
+				}
+				else {
+					this.board[i][j] = Square.BLACK;
+				}
+						
+			} 
+			i++;
+		} 
 	}
 	
 	public Game() {
@@ -214,6 +243,13 @@ public class Game {
 		else {
 			return GameResult.IN_PROGRESS;
 		}
+	}
+	
+	public SquareIndex randomValidMove() {
+		ArrayList<SquareIndex> moves = movesList(); 
+        Random rand = new Random();
+        SquareIndex chosenMove = moves.get(rand.nextInt(moves.size()));
+		return chosenMove;
 	}
 	
 	/** 
