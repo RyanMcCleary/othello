@@ -59,5 +59,9 @@ public class GameTreeNode {
     public int getNumVisits() {
         return this.numVisits;
     }
-    
+ 
+    public ArrayList<GameTreeNode> getChildren() {
+        return this.children;
+    }
+ 
 }

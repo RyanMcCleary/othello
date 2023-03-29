@@ -13,7 +13,11 @@ public class MCTSAgent {
      * a leaf node, returning that node.
      */
     public GameTreeNode traverse(GameTreeNode node) {
-        throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
+        GameTreeNode currentNode = node;
+        while (currentNode.getChildren().size() > 0) {
+            currentNode = currentNode.selectChildUCB();
+        }
+        return currentNode;
     }
     
     /**
@@ -44,6 +48,5 @@ public class MCTSAgent {
     public void expand(GameTreeNode leaf) {
         throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
     }
-    
     
 }
