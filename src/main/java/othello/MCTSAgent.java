@@ -1,7 +1,7 @@
 package othello;
 
 public class MCTSAgent {
-    
+        
     private GameTreeNode root;
     
     public MCTSAgent(GameState gameState) {
@@ -45,11 +45,5 @@ public class MCTSAgent {
         throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
     }
     
-    /**
-     * Using the UCB protocol, select a child of the given (non-leaf) node.
-     */
-    public GameTreeNode selectChildUCB(GameTreeNode node) {
-        throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
-    }
     
 }
