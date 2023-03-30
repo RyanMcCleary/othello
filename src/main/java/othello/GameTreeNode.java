@@ -64,4 +64,11 @@ public class GameTreeNode {
         return this.children;
     }
  
+    /**
+     * Returns a copy of this node's gameState field.
+     */
+    public GameState getGameState() {
+        return new GameState(this.gameState);
+    }
+ 
 }

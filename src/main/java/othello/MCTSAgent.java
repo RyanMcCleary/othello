@@ -46,7 +46,7 @@ public class MCTSAgent {
      * we will want to use a hueristic that takes the board position into account.
      */
     public void expand(GameTreeNode leaf) {
-        throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
+        GameState gameState = leaf.getGameState();
     }
     
 }

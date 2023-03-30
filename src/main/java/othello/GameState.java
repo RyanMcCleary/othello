@@ -181,6 +181,28 @@ public class GameState {
 		return validMove;
 	}
 	
+    /**
+     * Convenience method to make a move given a move of type SquareIndex.
+     * @param index: the square in which to move.
+     * @return true if the move was valid, false otherwise.
+     */
+    public boolean makeMove(SquareIndex index) {
+        return makeMove(index.getRow(), index.getColumn());
+    }
+    
+    /**
+     * Make a move non-destructively. This method creates a new GameState object and calls makeMove
+     * on it, returning the result.
+     *
+     * @param index: the square in which to move.
+     * @return The new game state, after the move is made.
+     */
+    public GameState copyAndMakeMove(SquareIndex index) {
+        GameState newState = new GameState(this);
+        newState.makeMove(index);
+        return newState;
+    }
+    
 	/*
 	 *  This function returns an ArrayList of Pair objects corresponding to all of the valid moves.
 	 */

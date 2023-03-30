@@ -10,12 +10,12 @@ public class SquareIndex  {
 	}
 	
 	
-	public int row()  {
+	public int getRow()  {
 		return this.row;	
 	}
 	
 	
-	public int column()  {
+	public int getColumn()  {
 		return this.column;	
 	}
 }
