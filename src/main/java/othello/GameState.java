@@ -24,6 +24,18 @@ public class GameState {
 		this.board[3][4] = this.board[4][3] = Square.BLACK;
 	}
 	
+    /**
+     * Copy constructor
+     */
+    public GameState(GameState other) {
+        this.currentPlayer = other.getCurrentPlayer();
+        this.board = new Square[8][8];
+        for (int row = 0; row < 8; row++) {
+            Square[] otherRow = other.getBoard()[row];
+            System.arraycopy(otherRow, 0, this.board[row], 0, 8);
+        }
+    }
+    
 	public GameState(String filename) throws FileNotFoundException {
 		this.currentPlayer = Player.BLACK;
 		this.board = new Square[8][8];
@@ -46,7 +58,7 @@ public class GameState {
 			i++;
 		} 
 	}
-	
+    
 	public void setSquare(int row, int col, Square s) {
 		this.board[row][col] = s;
 	}
@@ -55,6 +67,10 @@ public class GameState {
 		return this.board[row][col];
 	}
 	
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+    
 	public Player switchPlayer() {
 		if (this.currentPlayer == Player.WHITE) {
 			this.currentPlayer = Player.BLACK;
@@ -74,6 +90,10 @@ public class GameState {
 		}
 	}
 	
+    public Square[][] getBoard() {
+        return this.board;
+    }
+    
 	public Square getOppositeColor() {
 		if (this.currentPlayer == Player.BLACK) {
 			return Square.WHITE;
