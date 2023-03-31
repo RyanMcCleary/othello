@@ -30,5 +30,4 @@ class OthelloSquareButton extends JButton {
         g.fillOval(1, 1, getWidth() - 1, getHeight() - 1);
     }
                     
-    
 }

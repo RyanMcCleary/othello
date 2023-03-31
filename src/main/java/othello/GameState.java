@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 // import java.util.Optional;
 
 public class GameState {
+
 	private Square[][] board;
 	private Player currentPlayer;
 	
@@ -55,6 +56,10 @@ public class GameState {
 		return this.board[row][col];
 	}
 	
+	public Player getCurrentPlayer() {
+		return this.currentPlayer;
+	}
+
 	public Player switchPlayer() {
 		if (this.currentPlayer == Player.WHITE) {
 			this.currentPlayer = Player.BLACK;
@@ -252,4 +257,5 @@ public class GameState {
 	
 	/*public Player playRandomGame()  
 	*/
+
 }
