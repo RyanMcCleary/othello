@@ -31,7 +31,16 @@ public class MCTSAgent {
      * This is a good starting point, though.)
      */
     public double rollout(GameTreeNode leaf) {
-        throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
+        GameState gameState = leaf.getGameState();
+        GameResult result = gameState.checkWin();
+        while (result == GameResult.IN_PROGRESS) {
+            gameState.makeMove(gameState.randomValidMove());
+        }
+        switch (result) {
+            case BLACK_WIN: return -1.0;
+            case WHITE_WIN: return 1.0;
+            default: return 0.0;
+        }
     }
     
     /**
