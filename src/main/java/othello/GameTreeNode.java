@@ -70,5 +70,9 @@ public class GameTreeNode {
     public GameState getGameState() {
         return new GameState(this.gameState);
     }
+    
+    public void setChildren(ArrayList<GameTreeNode> children) {
+        this.children = children;
+    }
  
 }

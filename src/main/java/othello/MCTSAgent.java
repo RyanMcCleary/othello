@@ -1,5 +1,7 @@
 package othello;
 
+import java.util.ArrayList;
+
 public class MCTSAgent {
         
     private GameTreeNode root;
@@ -41,12 +43,21 @@ public class MCTSAgent {
     }
     
     /**
-     * Add a new node to the game tree as a child of the given leaf. 
-     * For now, we will choose this uniformly at random. In the future, 
-     * we will want to use a hueristic that takes the board position into account.
+     * For each move which can be made from the current game state represented
+     * in the given node, create a new child node where that move was made.
+     *
+     * @param leaf The node to expand.
+     *
+     * This method assumes that leaf is, in fact, a leaf node (i.e. leaf has no children).
      */
     public void expand(GameTreeNode leaf) {
         GameState gameState = leaf.getGameState();
+        ArrayList<GameTreeNode> children = new ArrayList<>();
+        ArrayList<SquareIndex> moves = gameState.movesList();
+        for (SquareIndex move : moves) {
+            children.add(new GameTreeNode(gameState.copyAndMakeMove(move), leaf));
+        }
+        leaf.setChildren(children);
     }
     
 }
