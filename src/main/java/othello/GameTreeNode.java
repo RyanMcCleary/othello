@@ -75,6 +75,10 @@ public class GameTreeNode {
         this.children = children;
     }
  
+    public void incrementVisits() {
+        ++this.numVisits;
+    }
+ 
     /**
      * Updates empiricalReward to the new reward after a rollout.
      * We assume as a precondition to calling this method that numVisits has 
