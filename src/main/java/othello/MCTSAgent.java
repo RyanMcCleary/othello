@@ -39,7 +39,9 @@ public class MCTSAgent {
      * this leaf and all of its parents with the new information gained from this rollout.
      */
     public void backPropegate(GameTreeNode leaf, double reward) {
-        throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
+        for (GameTreeNode node = leaf; !node.isRoot(); node = node.getParent()) {
+            node.updateReward(reward);
+        }
     }
     
     /**

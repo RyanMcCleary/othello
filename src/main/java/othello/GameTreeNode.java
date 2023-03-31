@@ -74,6 +74,10 @@ public class GameTreeNode {
     public void setChildren(ArrayList<GameTreeNode> children) {
         this.children = children;
     }
+    
+    public GameTreeNode getParent() {
+        return this.parent;
+    }
  
     public void incrementVisits() {
         ++this.numVisits;
