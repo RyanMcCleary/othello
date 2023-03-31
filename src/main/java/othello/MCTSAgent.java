@@ -71,4 +71,27 @@ public class MCTSAgent {
         leaf.setChildren(children);
     }
     
+    public GameTreeNode findBestChild() {
+        for (int i = 0; i < 10000; i++) {
+            GameTreeNode leaf = traverse(this.root);
+            expand(leaf);
+            for (GameTreeNode child : leaf.getChildren()) {
+                double reward = rollout(child);
+                backPropegate(child, reward);
+            }
+        }
+        ArrayList<GameTreeNode> rootChildren = root.getChildren();
+        if (rootChildren.size() == 0) {
+            return null;
+        }
+        GameTreeNode bestChild = rootChildren.get(0);
+        for (int i = 1; i < rootChildren.size(); i++) {
+            GameTreeNode currentChild = rootChildren.get(i);
+            if (currentChild.getEmpiricalReward() > bestChild.getEmpiricalReward()) {
+                bestChild = currentChild;
+            }
+        }
+        return bestChild;
+    }
+    
 }
