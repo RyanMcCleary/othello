@@ -75,4 +75,16 @@ public class GameTreeNode {
         this.children = children;
     }
  
+    /**
+     * Updates empiricalReward to the new reward after a rollout.
+     * We assume as a precondition to calling this method that numVisits has 
+     * already been incremented from the last visit.
+     * 
+     * @param reward The numerical reward obtained from rolling out this node.
+     */
+    public void updateReward(double reward) {
+        this.empiricalReward = ((this.numVisits - 1) * 
+            this.empiricalReward + reward) / this.empiricalReward;
+    }
+ 
 }
