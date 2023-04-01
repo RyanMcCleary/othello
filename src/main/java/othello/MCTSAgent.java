@@ -38,8 +38,6 @@ public class MCTSAgent {
         while (gameState.checkWin() == GameResult.IN_PROGRESS) {
             if (gameState.movesList().size() == 0) {
                 gameState.switchPlayer();
-                gameState.printBoard();
-                // gameState.printBoard();     
             }
             gameState.makeMove(gameState.randomValidMove());
         }
