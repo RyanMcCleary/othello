@@ -15,9 +15,11 @@ public class MCTSAgent {
      * a leaf node, returning that node.
      */
     public GameTreeNode traverse(GameTreeNode node) {
+        node.incrementVisits();
         GameTreeNode currentNode = node;
         while (currentNode.getChildren().size() > 0) {
             currentNode = currentNode.selectChildUCB();
+            currentNode.incrementVisits();
         }
         return currentNode;
     }
@@ -32,11 +34,16 @@ public class MCTSAgent {
      */
     public double rollout(GameTreeNode leaf) {
         GameState gameState = leaf.getGameState();
-        GameResult result = gameState.checkWin();
-        while (result == GameResult.IN_PROGRESS) {
+        leaf.incrementVisits();
+        while (gameState.checkWin() == GameResult.IN_PROGRESS) {
+            if (gameState.movesList().size() == 0) {
+                gameState.switchPlayer();
+                gameState.printBoard();
+                // gameState.printBoard();     
+            }
             gameState.makeMove(gameState.randomValidMove());
         }
-        switch (result) {
+        switch (gameState.checkWin()) {
             case BLACK_WIN: return -1.0;
             case WHITE_WIN: return 1.0;
             default: return 0.0;
@@ -71,8 +78,8 @@ public class MCTSAgent {
         leaf.setChildren(children);
     }
     
-    public GameTreeNode findBestChild() {
-        for (int i = 0; i < 10000; i++) {
+    public GameState makeBestMove() {
+        for (int i = 0; i < 1000000; i++) {
             GameTreeNode leaf = traverse(this.root);
             expand(leaf);
             for (GameTreeNode child : leaf.getChildren()) {
@@ -91,7 +98,7 @@ public class MCTSAgent {
                 bestChild = currentChild;
             }
         }
-        return bestChild;
+        return bestChild.getGameState();
     }
     
 }

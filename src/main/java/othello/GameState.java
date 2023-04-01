@@ -178,6 +178,7 @@ public class GameState {
 		if (validMove) {
 			setSquare(row, col, getCurrentColor());
 		}
+        switchPlayer();
 		return validMove;
 	}
 	
@@ -218,6 +219,14 @@ public class GameState {
 		return moves;
 	}
 	
+    public ArrayList<SquareIndex> movesList(Player player) {
+        Player oldPlayer = this.currentPlayer;
+        this.currentPlayer = player;
+        ArrayList<SquareIndex> moves = movesList();
+        this.currentPlayer = oldPlayer;
+        return moves;
+    }
+    
 	/*
 	 *  This function determines if the game is in progress, is a tie, or if one of the players won. 
 	 */
@@ -234,27 +243,36 @@ public class GameState {
 				}
 			}
 		}
-		if(movesList().isEmpty()) {
-			switchPlayer();
-			if(movesList().isEmpty()) {
-				if(numBlack == numWhite) {
-					return GameResult.TIE;
-				}
-				else if(numBlack > numWhite) {
-					return GameResult.BLACK_WIN;
-				}
-				else {
-					return GameResult.WHITE_WIN;
-				}
-			}
-			else {
-				switchPlayer();
-				return GameResult.IN_PROGRESS;
-			}
-		}
-		else {
-			return GameResult.IN_PROGRESS;
-		}
+        if (numBlack == 0) {
+            return GameResult.WHITE_WIN;
+        }
+        else if (numWhite == 0) {
+            return GameResult.BLACK_WIN;
+        }
+        else if (numBlack + numWhite < 64) {
+            if (movesList(Player.BLACK).size() == 0 &&
+                movesList(Player.WHITE).size() == 0) {
+                if (numWhite < numBlack) {
+                    return GameResult.BLACK_WIN;
+                }
+                else if (numBlack < numWhite) {
+                    return GameResult.WHITE_WIN;
+                }
+                else {
+                    return GameResult.TIE;
+                }
+            }
+            return GameResult.IN_PROGRESS;
+        }
+        else if (numBlack < numWhite) {
+            return GameResult.WHITE_WIN;
+        }
+        else if (numWhite < numBlack) {
+            return GameResult.BLACK_WIN;
+        }
+        else {
+            return GameResult.TIE;
+        }
 	}
 
 	// Prints board state
@@ -270,8 +288,8 @@ public class GameState {
 				else {
 					System.out.print("*");
 				}
-			System.out.println();
-			}
+            }
+            System.out.println();
 		}
 	}
 	
@@ -281,6 +299,14 @@ public class GameState {
         SquareIndex chosenMove = moves.get(rand.nextInt(moves.size()));
 		return chosenMove;
 	}
+    
+    public void updateWithCopy(GameState other) {
+        this.currentPlayer = other.getCurrentPlayer();
+        for (int row = 0; row < 8; row++) {
+            Square[] otherRow = other.getBoard()[row];
+            System.arraycopy(otherRow, 0, this.board[row], 0, 8);
+        }
+    }
 	
 	/** 
 	 *  This function calls movesList to obtain a list of all possible moves.

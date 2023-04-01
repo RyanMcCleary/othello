@@ -5,12 +5,12 @@ import java.awt.*;
 
 class OthelloSquareButton extends JButton {
     
-    private GameState gameState;
+    private OthelloUI parent;
     private int row;
     private int col;
     
-    public OthelloSquareButton(int row, int col, GameState g) {
-        this.gameState = g;
+    public OthelloSquareButton(int row, int col, OthelloUI parent) {
+        this.parent = parent;
         this.row = row;
         this.col = col;
     }
@@ -18,10 +18,10 @@ class OthelloSquareButton extends JButton {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (this.gameState.getSquare(row, col) == Square.EMPTY) {
+        if (this.parent.gameState.getSquare(row, col) == Square.EMPTY) {
             return;
         }
-        else if (this.gameState.getSquare(row, col) == Square.BLACK) {
+        else if (this.parent.gameState.getSquare(row, col) == Square.BLACK) {
             g.setColor(Color.BLACK);
         }
         else {
