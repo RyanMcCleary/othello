@@ -68,17 +68,10 @@ public class GameState {
 		return this.board[row][col];
 	}
 	
-<<<<<<< HEAD
-	public Player getCurrentPlayer() {
-		return this.currentPlayer;
-	}
-
-=======
     public Player getCurrentPlayer() {
         return this.currentPlayer;
     }
-    
->>>>>>> 6dc162735e16234fd5e9f1302e13e405e9d094f6
+
 	public Player switchPlayer() {
 		if (this.currentPlayer == Player.WHITE) {
 			this.currentPlayer = Player.BLACK;

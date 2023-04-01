@@ -35,19 +35,15 @@ public class OthelloUI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         if (gameState.isValidMove(i_, j_)) {
                             gameState.makeMove(i_, j_);
-<<<<<<< HEAD
-                            gameState.switchPlayer();
                             if (gameState.getCurrentPlayer() == Player.BLACK) {
                                 turn_msg.setText("Black to move");
                             }
                             else {
                                 turn_msg.setText("White to move");
                             }
-=======
                             getContentPane().repaint();                            
                             MCTSAgent mctsAgent = new MCTSAgent(gameState);
                             gameState = mctsAgent.makeBestMove();
->>>>>>> 086bcc844db97a42d80684cd02353d3853ff2f66
                             getContentPane().repaint();
                         }
                     }
