@@ -25,6 +25,18 @@ public class GameState {
 		this.board[3][4] = this.board[4][3] = Square.BLACK;
 	}
 	
+    /**
+     * Copy constructor
+     */
+    public GameState(GameState other) {
+        this.currentPlayer = other.getCurrentPlayer();
+        this.board = new Square[8][8];
+        for (int row = 0; row < 8; row++) {
+            Square[] otherRow = other.getBoard()[row];
+            System.arraycopy(otherRow, 0, this.board[row], 0, 8);
+        }
+    }
+    
 	public GameState(String filename) throws FileNotFoundException {
 		this.currentPlayer = Player.BLACK;
 		this.board = new Square[8][8];
@@ -47,7 +59,7 @@ public class GameState {
 			i++;
 		} 
 	}
-	
+    
 	public void setSquare(int row, int col, Square s) {
 		this.board[row][col] = s;
 	}
@@ -56,10 +68,17 @@ public class GameState {
 		return this.board[row][col];
 	}
 	
+<<<<<<< HEAD
 	public Player getCurrentPlayer() {
 		return this.currentPlayer;
 	}
 
+=======
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+    
+>>>>>>> 6dc162735e16234fd5e9f1302e13e405e9d094f6
 	public Player switchPlayer() {
 		if (this.currentPlayer == Player.WHITE) {
 			this.currentPlayer = Player.BLACK;
@@ -79,6 +98,10 @@ public class GameState {
 		}
 	}
 	
+    public Square[][] getBoard() {
+        return this.board;
+    }
+    
 	public Square getOppositeColor() {
 		if (this.currentPlayer == Player.BLACK) {
 			return Square.WHITE;
@@ -166,6 +189,28 @@ public class GameState {
 		return validMove;
 	}
 	
+    /**
+     * Convenience method to make a move given a move of type SquareIndex.
+     * @param index: the square in which to move.
+     * @return true if the move was valid, false otherwise.
+     */
+    public boolean makeMove(SquareIndex index) {
+        return makeMove(index.getRow(), index.getColumn());
+    }
+    
+    /**
+     * Make a move non-destructively. This method creates a new GameState object and calls makeMove
+     * on it, returning the result.
+     *
+     * @param index: the square in which to move.
+     * @return The new game state, after the move is made.
+     */
+    public GameState copyAndMakeMove(SquareIndex index) {
+        GameState newState = new GameState(this);
+        newState.makeMove(index);
+        return newState;
+    }
+    
 	/*
 	 *  This function returns an ArrayList of Pair objects corresponding to all of the valid moves.
 	 */

@@ -64,4 +64,35 @@ public class GameTreeNode {
         return this.children;
     }
  
+    /**
+     * Returns a copy of this node's gameState field.
+     */
+    public GameState getGameState() {
+        return new GameState(this.gameState);
+    }
+    
+    public void setChildren(ArrayList<GameTreeNode> children) {
+        this.children = children;
+    }
+    
+    public GameTreeNode getParent() {
+        return this.parent;
+    }
+ 
+    public void incrementVisits() {
+        ++this.numVisits;
+    }
+ 
+    /**
+     * Updates empiricalReward to the new reward after a rollout.
+     * We assume as a precondition to calling this method that numVisits has 
+     * already been incremented from the last visit.
+     * 
+     * @param reward The numerical reward obtained from rolling out this node.
+     */
+    public void updateReward(double reward) {
+        this.empiricalReward = ((this.numVisits - 1) * 
+            this.empiricalReward + reward) / this.empiricalReward;
+    }
+ 
 }
