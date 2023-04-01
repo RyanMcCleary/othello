@@ -95,4 +95,8 @@ public class GameTreeNode {
             this.empiricalReward + reward) / this.empiricalReward;
     }
  
+    public void printBoard() {
+        this.gameState.printBoard();
+    }
+ 
 }

@@ -14,6 +14,7 @@ public class Main {
                 ui.setVisible(true);
             }
         });
+        
         /*
 		Game othello = new Game("boardconfiguration.txt");
 		othello.printBoard();

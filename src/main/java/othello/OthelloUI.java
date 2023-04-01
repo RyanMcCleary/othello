@@ -6,7 +6,7 @@ import java.awt.event.*;
 
 public class OthelloUI extends JFrame {
         
-    private GameState gameState;
+    public GameState gameState;
         
     public OthelloUI() {
         super("Othello");
@@ -24,7 +24,7 @@ public class OthelloUI extends JFrame {
         turn_msg.setBackground(new Color(0x40, 0x53, 0x36));
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                OthelloSquareButton square = new OthelloSquareButton(i, j, this.gameState);
+                OthelloSquareButton square = new OthelloSquareButton(i, j, this);
                 square.setBackground(new Color(0x40, 0x53, 0x36));
                 square.setMargin(new Insets(0, 0, 0, 0));
                 square.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -35,6 +35,7 @@ public class OthelloUI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         if (gameState.isValidMove(i_, j_)) {
                             gameState.makeMove(i_, j_);
+<<<<<<< HEAD
                             gameState.switchPlayer();
                             if (gameState.getCurrentPlayer() == Player.BLACK) {
                                 turn_msg.setText("Black to move");
@@ -42,6 +43,11 @@ public class OthelloUI extends JFrame {
                             else {
                                 turn_msg.setText("White to move");
                             }
+=======
+                            getContentPane().repaint();                            
+                            MCTSAgent mctsAgent = new MCTSAgent(gameState);
+                            gameState = mctsAgent.makeBestMove();
+>>>>>>> 086bcc844db97a42d80684cd02353d3853ff2f66
                             getContentPane().repaint();
                         }
                     }
