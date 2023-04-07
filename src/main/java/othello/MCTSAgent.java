@@ -1,7 +1,9 @@
 package othello;
 
+import java.util.ArrayList;
+
 public class MCTSAgent {
-    
+        
     private GameTreeNode root;
     
     public MCTSAgent(GameState gameState) {
@@ -13,7 +15,13 @@ public class MCTSAgent {
      * a leaf node, returning that node.
      */
     public GameTreeNode traverse(GameTreeNode node) {
-        throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
+        node.incrementVisits();
+        GameTreeNode currentNode = node;
+        while (currentNode.getChildren().size() > 0) {
+            currentNode = currentNode.selectChildUCB();
+            currentNode.incrementVisits();
+        }
+        return currentNode;
     }
     
     /**
@@ -25,7 +33,19 @@ public class MCTSAgent {
      * This is a good starting point, though.)
      */
     public double rollout(GameTreeNode leaf) {
-        throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
+        GameState gameState = leaf.getGameState();
+        leaf.incrementVisits();
+        while (gameState.checkWin() == GameResult.IN_PROGRESS) {
+            if (gameState.movesList().size() == 0) {
+                gameState.switchPlayer();
+            }
+            gameState.makeMove(gameState.randomValidMove());
+        }
+        switch (gameState.checkWin()) {
+            case BLACK_WIN: return -1.0;
+            case WHITE_WIN: return 1.0;
+            default: return 0.0;
+        }
     }
     
     /**
@@ -33,23 +53,50 @@ public class MCTSAgent {
      * this leaf and all of its parents with the new information gained from this rollout.
      */
     public void backPropegate(GameTreeNode leaf, double reward) {
-        throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
+        for (GameTreeNode node = leaf; !node.isRoot(); node = node.getParent()) {
+            node.updateReward(reward);
+        }
     }
     
     /**
-     * Add a new node to the game tree as a child of the given leaf. 
-     * For now, we will choose this uniformly at random. In the future, 
-     * we will want to use a hueristic that takes the board position into account.
+     * For each move which can be made from the current game state represented
+     * in the given node, create a new child node where that move was made.
+     *
+     * @param leaf The node to expand.
+     *
+     * This method assumes that leaf is, in fact, a leaf node (i.e. leaf has no children).
      */
     public void expand(GameTreeNode leaf) {
-        throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
+        GameState gameState = leaf.getGameState();
+        ArrayList<GameTreeNode> children = new ArrayList<>();
+        ArrayList<SquareIndex> moves = gameState.movesList();
+        for (SquareIndex move : moves) {
+            children.add(new GameTreeNode(gameState.copyAndMakeMove(move), leaf));
+        }
+        leaf.setChildren(children);
     }
     
-    /**
-     * Using the UCB protocol, select a child of the given (non-leaf) node.
-     */
-    public GameTreeNode selectChildUCB(GameTreeNode node) {
-        throw new UnsupportedOperationException("... and the Lord said unto him, 'Thou shalt not call this method until it is implemented.'");
+    public GameState makeBestMove() {
+        for (int i = 0; i < 1000000; i++) {
+            GameTreeNode leaf = traverse(this.root);
+            expand(leaf);
+            for (GameTreeNode child : leaf.getChildren()) {
+                double reward = rollout(child);
+                backPropegate(child, reward);
+            }
+        }
+        ArrayList<GameTreeNode> rootChildren = root.getChildren();
+        if (rootChildren.size() == 0) {
+            return null;
+        }
+        GameTreeNode bestChild = rootChildren.get(0);
+        for (int i = 1; i < rootChildren.size(); i++) {
+            GameTreeNode currentChild = rootChildren.get(i);
+            if (currentChild.getEmpiricalReward() > bestChild.getEmpiricalReward()) {
+                bestChild = currentChild;
+            }
+        }
+        return bestChild.getGameState();
     }
     
 }

@@ -1,6 +1,7 @@
 package othello;
 
 public class SquareIndex  {
+
 	private int row;
 	private int column;
 	
@@ -9,13 +10,13 @@ public class SquareIndex  {
 		this.column = column;
 	}
 	
-	
-	public int row()  {
+	public int getRow()  {
 		return this.row;	
 	}
 	
 	
-	public int column()  {
+	public int getColumn()  {
 		return this.column;	
 	}
+
 }

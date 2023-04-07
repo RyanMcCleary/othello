@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 // import java.util.Optional;
 
 public class GameState {
+
 	private Square[][] board;
 	private Player currentPlayer;
 	
@@ -24,6 +25,18 @@ public class GameState {
 		this.board[3][4] = this.board[4][3] = Square.BLACK;
 	}
 	
+    /**
+     * Copy constructor
+     */
+    public GameState(GameState other) {
+        this.currentPlayer = other.getCurrentPlayer();
+        this.board = new Square[8][8];
+        for (int row = 0; row < 8; row++) {
+            Square[] otherRow = other.getBoard()[row];
+            System.arraycopy(otherRow, 0, this.board[row], 0, 8);
+        }
+    }
+    
 	public GameState(String filename) throws FileNotFoundException {
 		this.currentPlayer = Player.BLACK;
 		this.board = new Square[8][8];
@@ -49,7 +62,7 @@ public class GameState {
 			i++;
 		} 
 	}
-	
+    
 	public void setSquare(int row, int col, Square s) {
 		this.board[row][col] = s;
 	}
@@ -58,6 +71,10 @@ public class GameState {
 		return this.board[row][col];
 	}
 	
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
 	public Player switchPlayer() {
 		if (this.currentPlayer == Player.WHITE) {
 			this.currentPlayer = Player.BLACK;
@@ -77,6 +94,10 @@ public class GameState {
 		}
 	}
 	
+    public Square[][] getBoard() {
+        return this.board;
+    }
+    
 	public Square getOppositeColor() {
 		if (this.currentPlayer == Player.BLACK) {
 			return Square.WHITE;
@@ -161,9 +182,32 @@ public class GameState {
 		if (validMove) {
 			setSquare(row, col, getCurrentColor());
 		}
+        switchPlayer();
 		return validMove;
 	}
 	
+    /**
+     * Convenience method to make a move given a move of type SquareIndex.
+     * @param index: the square in which to move.
+     * @return true if the move was valid, false otherwise.
+     */
+    public boolean makeMove(SquareIndex index) {
+        return makeMove(index.getRow(), index.getColumn());
+    }
+    
+    /**
+     * Make a move non-destructively. This method creates a new GameState object and calls makeMove
+     * on it, returning the result.
+     *
+     * @param index: the square in which to move.
+     * @return The new game state, after the move is made.
+     */
+    public GameState copyAndMakeMove(SquareIndex index) {
+        GameState newState = new GameState(this);
+        newState.makeMove(index);
+        return newState;
+    }
+    
 	/*
 	 *  This function returns an ArrayList of Pair objects corresponding to all of the valid moves.
 	 */
@@ -179,6 +223,14 @@ public class GameState {
 		return moves;
 	}
 	
+    public ArrayList<SquareIndex> movesList(Player player) {
+        Player oldPlayer = this.currentPlayer;
+        this.currentPlayer = player;
+        ArrayList<SquareIndex> moves = movesList();
+        this.currentPlayer = oldPlayer;
+        return moves;
+    }
+    
 	/*
 	 *  This function determines if the game is in progress, is a tie, or if one of the players won. 
 	 */
@@ -195,27 +247,36 @@ public class GameState {
 				}
 			}
 		}
-		if(movesList().isEmpty()) {
-			switchPlayer();
-			if(movesList().isEmpty()) {
-				if(numBlack == numWhite) {
-					return GameResult.TIE;
-				}
-				else if(numBlack > numWhite) {
-					return GameResult.BLACK_WIN;
-				}
-				else {
-					return GameResult.WHITE_WIN;
-				}
-			}
-			else {
-				switchPlayer();
-				return GameResult.IN_PROGRESS;
-			}
-		}
-		else {
-			return GameResult.IN_PROGRESS;
-		}
+        if (numBlack == 0) {
+            return GameResult.WHITE_WIN;
+        }
+        else if (numWhite == 0) {
+            return GameResult.BLACK_WIN;
+        }
+        else if (numBlack + numWhite < 64) {
+            if (movesList(Player.BLACK).size() == 0 &&
+                movesList(Player.WHITE).size() == 0) {
+                if (numWhite < numBlack) {
+                    return GameResult.BLACK_WIN;
+                }
+                else if (numBlack < numWhite) {
+                    return GameResult.WHITE_WIN;
+                }
+                else {
+                    return GameResult.TIE;
+                }
+            }
+            return GameResult.IN_PROGRESS;
+        }
+        else if (numBlack < numWhite) {
+            return GameResult.WHITE_WIN;
+        }
+        else if (numWhite < numBlack) {
+            return GameResult.BLACK_WIN;
+        }
+        else {
+            return GameResult.TIE;
+        }
 	}
 
 	// Prints board state
@@ -231,8 +292,10 @@ public class GameState {
 				else {
 					System.out.print("*");
 				}
-			}
-			System.out.println();
+
+            }
+            System.out.println();
+
 		}
 	}
 	
@@ -242,6 +305,14 @@ public class GameState {
         SquareIndex chosenMove = moves.get(rand.nextInt(moves.size()));
 		return chosenMove;
 	}
+    
+    public void updateWithCopy(GameState other) {
+        this.currentPlayer = other.getCurrentPlayer();
+        for (int row = 0; row < 8; row++) {
+            Square[] otherRow = other.getBoard()[row];
+            System.arraycopy(otherRow, 0, this.board[row], 0, 8);
+        }
+    }
 	
 	/** 
 	 *  This function calls movesList to obtain a list of all possible moves.
@@ -255,4 +326,5 @@ public class GameState {
 	
 	/*public Player playRandomGame()  
 	*/
+
 }
