@@ -42,7 +42,7 @@ public class MCTSAgent {
             gameState.makeMove(gameState.randomValidMove());
         }
         switch (gameState.checkWin()) {
-            case BLACK_WIN: return -10.0;
+            case BLACK_WIN: return -1.0;
             case WHITE_WIN: return 1.0;
             default: return 0.0;
         }
@@ -97,6 +97,10 @@ public class MCTSAgent {
             }
         }
         return bestChild.getGameState();
+    }
+    
+    public GameTreeNode getRoot() {
+        return this.root;
     }
     
 }
