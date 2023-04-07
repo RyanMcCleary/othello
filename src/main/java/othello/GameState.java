@@ -2,11 +2,9 @@ package othello;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.File;
+import java.io.InputStream;
 import java.util.Random;
-import java.lang.String;
-import java.io.FileNotFoundException;
-// import java.util.Optional;
+import java.util.Arrays;
 
 public class GameState {
 
@@ -37,17 +35,21 @@ public class GameState {
         }
     }
     
-	public GameState(String filename) throws FileNotFoundException {
+	public GameState(InputStream in) {
 		this.currentPlayer = Player.BLACK;
 		this.board = new Square[8][8];
-		Scanner scanner = new Scanner(new File(filename));
+		Scanner scanner = new Scanner(in);
 		String line = "";
 		int i=0;
+        line = scanner.nextLine();
+        if (line.startsWith("BLACK")) {
+            this.currentPlayer = Player.BLACK;
+        }
+        if (line.startsWith("WHITE")) {
+            this.currentPlayer = Player.WHITE;
+        }
 		while (scanner.hasNextLine()) {
 			line = scanner.nextLine();
-			
-			
-			
 			for (int j=0; j<line.length(); j++) { 
 				if (line.charAt(j) == '*') {
 					this.board[i][j] = Square.EMPTY;
@@ -314,17 +316,16 @@ public class GameState {
         }
     }
 	
-	/** 
-	 *  This function calls movesList to obtain a list of all possible moves.
-	 *  Then, we randomly pick moves from the array. We do this for both the computer and 
-	 *  the player until the game is over. The winning player is returned. 
-	 */
-	/*public takeTurn(Player player)  {
-		
-	}*/
-	
-	
-	/*public Player playRandomGame()  
-	*/
+	@Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ( ! (other instanceof GameState)) {
+            return false;
+        }
+        GameState otherGameState = (GameState) other;
+        return this.currentPlayer == otherGameState.currentPlayer && Arrays.deepEquals(this.board, otherGameState.board);
+    }
 
 }

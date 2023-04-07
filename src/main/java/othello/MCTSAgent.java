@@ -18,7 +18,7 @@ public class MCTSAgent {
         node.incrementVisits();
         GameTreeNode currentNode = node;
         while (currentNode.getChildren().size() > 0) {
-            currentNode = currentNode.selectChildUCB();
+            currentNode = currentNode.selectChildUCB(currentNode.getGameState().getCurrentPlayer());
             currentNode.incrementVisits();
         }
         return currentNode;
@@ -42,7 +42,7 @@ public class MCTSAgent {
             gameState.makeMove(gameState.randomValidMove());
         }
         switch (gameState.checkWin()) {
-            case BLACK_WIN: return -1.0;
+            case BLACK_WIN: return -10.0;
             case WHITE_WIN: return 1.0;
             default: return 0.0;
         }
@@ -77,7 +77,7 @@ public class MCTSAgent {
     }
     
     public GameState makeBestMove() {
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 5000000; i++) {
             GameTreeNode leaf = traverse(this.root);
             expand(leaf);
             for (GameTreeNode child : leaf.getChildren()) {

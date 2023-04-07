@@ -33,7 +33,7 @@ public class GameTreeNode {
      * Return a child of this node, according to the UCB policy.
      * Preconditions: a node must have children in order to call this method on it.
      */
-    public GameTreeNode selectChildUCB() {
+    public GameTreeNode selectChildUCB(Player player) {
         if (children.size() == 0) {
             throw new IllegalStateException("selectChildUCB() called on node with no children.");
         }
@@ -42,9 +42,20 @@ public class GameTreeNode {
                 ucbConstant * Math.sqrt(Math.log(this.getNumVisits()) / result.getNumVisits());
         for (int i = 1; i < this.children.size(); i++) {
             GameTreeNode node = this.children.get(i);
-            double ucbVal = node.getEmpiricalReward() +
+            double ucbVal;
+            if (player == Player.WHITE) {
+                ucbVal = node.getEmpiricalReward() +
                     ucbConstant * Math.sqrt(Math.log(this.getNumVisits()) / node.getNumVisits());
-            if (ucbVal > maxUCBVal) {
+            }
+            else {
+                ucbVal = node.getEmpiricalReward() -
+                    ucbConstant * Math.sqrt(Math.log(this.getNumVisits()) / node.getNumVisits());
+            }
+            if (player == Player.WHITE && ucbVal > maxUCBVal) {
+                maxUCBVal = ucbVal;
+                result = node;
+            }
+            if (player == Player.BLACK && ucbVal < maxUCBVal) {
                 maxUCBVal = ucbVal;
                 result = node;
             }
