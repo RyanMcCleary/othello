@@ -29,9 +29,12 @@ public class GameState {
 		this.board = new Square[8][8];
 		Scanner scanner = new Scanner(new File(filename));
 		String line = "";
+		int i=0;
 		while (scanner.hasNextLine()) {
 			line = scanner.nextLine();
-			int i=0;
+			
+			
+			
 			for (int j=0; j<line.length(); j++) { 
 				if (line.charAt(j) == '*') {
 					this.board[i][j] = Square.EMPTY;
@@ -39,7 +42,7 @@ public class GameState {
 				else if (line.charAt(j) == 'W') {
 					this.board[i][j] = Square.WHITE;
 				}
-				else {
+				else if (line.charAt(j) == 'B') {
 					this.board[i][j] = Square.BLACK;
 				}
 			} 
@@ -228,8 +231,8 @@ public class GameState {
 				else {
 					System.out.print("*");
 				}
-			System.out.println();
 			}
+			System.out.println();
 		}
 	}
 	

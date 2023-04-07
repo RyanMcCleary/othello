@@ -1,12 +1,12 @@
 package othello;
 
 import javax.swing.JFrame;
-
+import java.io.FileNotFoundException;
 public class Main {
 
 	public static void main(String[] args) {
         
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+      /* javax.swing.SwingUtilities.invokeLater(new Runnable() {
         
             @Override
             public void run() {
@@ -14,11 +14,16 @@ public class Main {
                 ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 ui.setVisible(true);
             }
-        });
-        /*
-		Game othello = new Game("boardconfiguration.txt");
-		othello.printBoard();
-		*/
+        });*/
+        try{
+		  GameState othello = new GameState("C:\\Users\\charl\\othello\\src\\main\\java\\othello\\boardconfiguration.txt");
+		  othello.printBoard();
+		}
+		catch(FileNotFoundException e)
+		{
+			System.out.println("Configuation file not found.\n");
+		}
+		
 	}
 
 }
