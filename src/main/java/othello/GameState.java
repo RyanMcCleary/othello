@@ -118,7 +118,6 @@ public class GameState {
 		if (!isValidDirection(row, col, rowDelta, colDelta)) {
 			return false;
 		}
-		System.out.printf("flipPiecesInDirection(%d, %d, %d, %d)\n", row, col, rowDelta, colDelta);
 		row += rowDelta;
 		col += colDelta;
 		while (isInBounds(row, col) && this.board[row][col] == getOppositeColor()) {
