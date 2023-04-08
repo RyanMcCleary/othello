@@ -5,11 +5,18 @@ import java.awt.*;
 
 class OthelloSquareButton extends JButton {
     
-    private OthelloUI parent;
+    // private OthelloUI parent;
+    private OthelloUI2 parent;
     private int row;
     private int col;
     
-    public OthelloSquareButton(int row, int col, OthelloUI parent) {
+    // public OthelloSquareButton(int row, int col, OthelloUI parent) {
+    //     this.parent = parent;
+    //     this.row = row;
+    //     this.col = col;
+    // }
+
+    public OthelloSquareButton(int row, int col, OthelloUI2 parent) {
         this.parent = parent;
         this.row = row;
         this.col = col;
