@@ -7,7 +7,7 @@ import java.awt.event.*;
 public class OthelloUI extends JFrame {
         
     public GameState gameState;
-    boolean buttonsActive = true;
+    private boolean buttonsActive = true;
 
     public class MCTSWorker extends SwingWorker<GameState, Object> {
         
