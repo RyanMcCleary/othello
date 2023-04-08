@@ -7,7 +7,35 @@ import java.awt.event.*;
 public class OthelloUI extends JFrame {
         
     public GameState gameState;
+    boolean buttonsActive = true;
+
+    public class MCTSWorker extends SwingWorker<GameState, Object> {
         
+        private MCTSAgent agent;
+        
+        public MCTSWorker(GameState currentGameState) {
+            this.agent = new MCTSAgent(currentGameState);
+        }
+        
+        @Override
+        public GameState doInBackground() {
+            return this.agent.makeBestMove();
+        }
+        
+        @Override
+        public void done() {
+            try {
+                gameState = get();
+                getContentPane().repaint();
+                buttonsActive = true;
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+    }
+       
     public OthelloUI() {
         super("Othello");
         this.gameState = new GameState();
@@ -33,7 +61,7 @@ public class OthelloUI extends JFrame {
                     
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (gameState.isValidMove(i_, j_)) {
+                        if (buttonsActive && gameState.isValidMove(i_, j_)) {
                             gameState.makeMove(i_, j_);
                             if (gameState.getCurrentPlayer() == Player.BLACK) {
                                 turn_msg.setText("Black to move");
@@ -42,9 +70,8 @@ public class OthelloUI extends JFrame {
                                 turn_msg.setText("White to move");
                             }
                             getContentPane().repaint();                            
-                            MCTSAgent mctsAgent = new MCTSAgent(gameState);
-                            gameState = mctsAgent.makeBestMove();
-                            getContentPane().repaint();
+                            (new MCTSWorker(gameState)).execute();
+                            buttonsActive = false;
                         }
                     }
                     

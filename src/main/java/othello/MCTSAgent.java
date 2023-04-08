@@ -77,7 +77,7 @@ public class MCTSAgent {
     }
     
     public GameState makeBestMove() {
-        for (int i = 0; i < 5000000; i++) {
+        for (int i = 0; i < 500000; i++) {
             GameTreeNode leaf = traverse(this.root);
             expand(leaf);
             for (GameTreeNode child : leaf.getChildren()) {
