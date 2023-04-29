@@ -244,15 +244,8 @@ public class GameState {
 				}
 			}
 		}
-        if (numBlack == 0) {
-            return GameResult.WHITE_WIN;
-        }
-        else if (numWhite == 0) {
-            return GameResult.BLACK_WIN;
-        }
-        else if (numBlack + numWhite < 64) {
-            if (movesList(Player.BLACK).size() == 0 &&
-                movesList(Player.WHITE).size() == 0) {
+        if (numBlack + numWhite < 64) {
+            if (movesList().size() == 0) {
                 if (numWhite < numBlack) {
                     return GameResult.BLACK_WIN;
                 }
@@ -263,7 +256,9 @@ public class GameState {
                     return GameResult.TIE;
                 }
             }
-            return GameResult.IN_PROGRESS;
+			else {
+            	return GameResult.IN_PROGRESS;
+			}
         }
         else if (numBlack < numWhite) {
             return GameResult.WHITE_WIN;
