@@ -9,8 +9,8 @@ public class OthelloUI extends JFrame {
     
     public GameState gameState;
     public JPanel panel;
-    public JCheckBox show_moves_box;
-    public JLabel turn_tracker;
+    public JCheckBox showMovesBox;
+    public JLabel turnTracker;
     public ArrayList<ArrayList<JButton>> board;
     
     public OthelloUI() {
@@ -18,8 +18,8 @@ public class OthelloUI extends JFrame {
         this.gameState = new GameState();
         this.panel = initializePanel();
         this.board = initializeBoard();
-        this.show_moves_box = initializeShowMovesBox();
-        this.turn_tracker = initializeTurnTracker();
+        this.showMovesBox = initializeShowMovesBox();
+        this.turnTracker = initializeTurnTracker();
     }
 
     public JPanel initializePanel() {
@@ -53,12 +53,12 @@ public class OthelloUI extends JFrame {
 
     public JCheckBox initializeShowMovesBox() {
         GridBagConstraints constraints = new GridBagConstraints();
-        JCheckBox show_moves = new JCheckBox("Show moves");
-        show_moves.setForeground(Color.BLACK);
-        show_moves.setBackground(Color.WHITE);
-        show_moves.setHorizontalAlignment(SwingConstants.CENTER);
-        show_moves.setVerticalAlignment(SwingConstants.CENTER);
-        show_moves.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        JCheckBox showMoves = new JCheckBox("Show moves");
+        showMoves.setForeground(Color.BLACK);
+        showMoves.setBackground(Color.WHITE);
+        showMoves.setHorizontalAlignment(SwingConstants.CENTER);
+        showMoves.setVerticalAlignment(SwingConstants.CENTER);
+        showMoves.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 4;
         constraints.gridy = 8;
@@ -66,9 +66,9 @@ public class OthelloUI extends JFrame {
         constraints.gridwidth = 4;
         constraints.weightx = 1;
         constraints.weighty = 1;
-        panel.add(show_moves, constraints);
+        panel.add(showMoves, constraints);
 
-        return show_moves;
+        return showMoves;
     }
 
     public ArrayList<ArrayList<JButton>> initializeBoard() {
@@ -119,20 +119,20 @@ public class OthelloUI extends JFrame {
         GameResult status = gameState.checkWin();
         if (status == GameResult.IN_PROGRESS) {
             if (gameState.getCurrentPlayer() == Player.BLACK) {
-                turn_tracker.setText("Black to move");
+                turnTracker.setText("Black to move");
             }
             else {
-                turn_tracker.setText("White to move");
+                turnTracker.setText("White to move");
             }
         }
         else if (status == GameResult.BLACK_WIN) {
-            turn_tracker.setText("Black wins!");
+            turnTracker.setText("Black wins!");
         }
         else if (status == GameResult.WHITE_WIN) {
-            turn_tracker.setText("White wins!");
+            turnTracker.setText("White wins!");
         }
         else {
-            turn_tracker.setText("Tie!");
+            turnTracker.setText("Tie!");
         }
     }
 

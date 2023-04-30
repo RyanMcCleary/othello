@@ -16,7 +16,7 @@ class OthelloSquareButton extends JButton {
     }
 
     public void setSquareColor() {
-        if (this.parent.show_moves_box.isSelected() && this.parent.gameState.movesList(this.parent.gameState.getCurrentPlayer()).contains(new SquareIndex(row,col))) {
+        if (this.parent.showMovesBox.isSelected() && this.parent.gameState.movesList(this.parent.gameState.getCurrentPlayer()).contains(new SquareIndex(row,col))) {
             this.parent.board.get(row).get(col).setBackground(Color.GREEN);
         }
         else {
