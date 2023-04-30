@@ -19,4 +19,16 @@ public class SquareIndex  {
 		return this.column;	
 	}
 
+	@Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ( ! (other instanceof SquareIndex)) {
+            return false;
+        }
+        SquareIndex otherSquareIndex = (SquareIndex) other;
+        return this.row == otherSquareIndex.getRow() && this.column == otherSquareIndex.getColumn();
+	}
+
 }
