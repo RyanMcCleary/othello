@@ -26,7 +26,7 @@ void game_state_print(struct game_state *state) {
         puts("current_player: PLAYER_WHITE");
     }
     else {
-        puts("FIXME: unexpected value of current_player!");
+        fputs("FIXME: unexpected value of current_player!", stderr);
     }
     for (size_t row = 0; row < 8; ++row) {
         for (size_t col = 0; col < 8; ++col) {
@@ -37,8 +37,11 @@ void game_state_print(struct game_state *state) {
             case SQUARE_WHITE:
                 putchar('W');
                 break;
-            default:
+            case SQUARE_EMPTY:
                 putchar('*');
+                break;
+            default:
+                fprintf(stderr, "\nFIXME: Unexpected value found in board[%zu][%zu]\n", row, col);
             }
         }
         putchar('\n');
