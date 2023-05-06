@@ -2,6 +2,7 @@
 #define GAME_STATE_H
 
 #include <stddef.h>
+#include <stdbool.h>
 
 enum square_state {
     SQUARE_EMPTY = 0, SQUARE_BLACK, SQUARE_WHITE
@@ -16,6 +17,11 @@ struct game_state {
     enum player current_player;
 };
 
+struct square_index {
+    int row;
+    int col;
+};
+
 struct game_state *game_state_alloc(size_t num_elements);
 
 struct game_state *game_state_init(struct game_state *state);
@@ -23,5 +29,11 @@ struct game_state *game_state_init(struct game_state *state);
 void game_state_free(struct game_state *state);
 
 void game_state_print(struct game_state *state);
+
+bool game_state_valid_move(struct game_state *state, int row, int col);
+
+void game_state_make_move(struct game_state *state, int row, int col);
+
+void square_index_init(struct square_index *index, int row, int col);
 
 #endif

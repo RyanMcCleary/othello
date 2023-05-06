@@ -17,5 +17,16 @@ int main(int argc, char **argv) {
     game_state_print(state_p);
     game_state_free(state_p);
 
+    while (true) {
+        int row = 0, col = 0;
+        printf("Enter row and column for move: ");
+        fflush(stdout);
+        scanf("%d %d", &row, &col);
+        if (game_state_valid_move(&state, row, col)) {
+            game_state_make_move(&state, row, col);
+            game_state_print(&state);
+        }
+    }
+
     return 0;
 }

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "game_state.h"
 
 
@@ -83,8 +82,8 @@ void game_state_print(struct game_state *state) {
     else {
         fputs("FIXME: unexpected value of current_player!", stderr);
     }
-    for (size_t row = 0; row < 8; ++row) {
-        for (size_t col = 0; col < 8; ++col) {
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
             switch(state->board[row][col]) {
             case SQUARE_BLACK:
                 putchar('B');
@@ -96,14 +95,15 @@ void game_state_print(struct game_state *state) {
                 putchar('*');
                 break;
             default:
-                fprintf(stderr, "\nFIXME: Unexpected value found in board[%zu][%zu]\n", row, col);
+                fprintf(stderr, "\nFIXME: Unexpected value found in board[%d][%d]\n", row, col);
             }
         }
         putchar('\n');
     }
 }
 
-static bool flip_direction(struct game_state *state, int row, int col, int row_delta, int col_delta) {
+static bool flip_direction(struct game_state *state, int row, int col,
+                           int row_delta, int col_delta) {
     if (!valid_direction(state, row, col, row_delta, col_delta)) {
         return false;
     }
@@ -117,3 +117,42 @@ static bool flip_direction(struct game_state *state, int row, int col, int row_d
     }
     return true;
 }
+
+bool game_state_valid_move(struct game_state *state, int row, int col) {
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (!(i == 0 && j == 0) && valid_direction(state, row, col, i, j)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void game_state_make_move(struct game_state *state, int row, int col) {
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (!(i == 0 && j == 0)) flip_direction(state, row, col, i, j);
+        }
+    }
+}
+
+void square_index_init(struct square_index *index, int row, int col) {
+    index->row = row;
+    index->col = col;
+}
+
+size_t game_state_list_moves(struct game_state *state,
+                             struct square_index *output_array) {
+    size_t out_idx = 0;
+    for (int row = 0; row < 8; row++) {
+        for (int col = 0; col < 8; col++) {
+            if (game_state_valid_move(state, row, col)) {
+                square_index_init(&output_array[out_idx++], row, col);
+            }
+        }
+    }
+    return out_idx;
+}
+
+
