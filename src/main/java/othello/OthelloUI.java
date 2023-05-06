@@ -3,6 +3,9 @@ package othello;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class OthelloUI extends JFrame {
         
@@ -43,6 +46,21 @@ public class OthelloUI extends JFrame {
     }
     
     private void initializeComponents() {
+        JMenuBar menuBar;
+        JMenu menu;
+        JMenuItem menuItem;
+        menuBar = new JMenuBar();
+        menu = new JMenu("Redo Move");
+        menu.setMnemonic(KeyEvent.VK_Y);
+        menu.getAccessibleContext().setAccessibleDescription(
+                "Redo Move");
+        menuBar.add(menu);
+        menu = new JMenu("Undo Move");
+        menu.setMnemonic(KeyEvent.VK_Z);
+        menu.getAccessibleContext().setAccessibleDescription(
+                "Undo Move");
+        menuBar.add(menu);
+        this.add(menuBar);
         getContentPane().setLayout(new GridLayout(0, 8));
         JLabel turn_msg = new JLabel("Black to move");
         turn_msg.setPreferredSize(new Dimension(50, 50));
@@ -56,6 +74,7 @@ public class OthelloUI extends JFrame {
                 square.setBackground(new Color(0x40, 0x53, 0x36));
                 square.setMargin(new Insets(0, 0, 0, 0));
                 square.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				square.setFocusable(true);
                 final int i_ = i, j_ = j;
                 square.addActionListener(new ActionListener() {
                     
