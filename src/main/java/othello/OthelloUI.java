@@ -47,19 +47,43 @@ public class OthelloUI extends JFrame {
     
     private void initializeComponents() {
         JMenuBar menuBar;
-        JMenu menu;
-        JMenuItem menuItem;
+        JMenu gameMenu, helpMenu;
+        JMenuItem newGame, saveGame, loadGame, resumeGame;
         menuBar = new JMenuBar();
-        menu = new JMenu("Redo Move");
-        menu.setMnemonic(KeyEvent.VK_Y);
-        menu.getAccessibleContext().setAccessibleDescription(
-                "Redo Move");
-        menuBar.add(menu);
-        menu = new JMenu("Undo Move");
-        menu.setMnemonic(KeyEvent.VK_Z);
-        menu.getAccessibleContext().setAccessibleDescription(
-                "Undo Move");
-        menuBar.add(menu);
+        gameMenu = new JMenu("Game Options");
+        gameMenu.setMnemonic(KeyEvent.VK_G);        
+        gameMenu.getAccessibleContext().setAccessibleDescription(
+                "Game Options");
+        newGame = new JMenuItem("New Game");
+        newGame.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+        newGame.getAccessibleContext().setAccessibleDescription(
+                "New Game");
+        gameMenu.add(newGame);
+        saveGame = new JMenuItem("Save Game");
+        saveGame.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+        saveGame.getAccessibleContext().setAccessibleDescription(
+                "Save Game");
+        gameMenu.add(saveGame);
+        resumeGame = new JMenuItem("Resume Game");
+        resumeGame.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+        resumeGame.getAccessibleContext().setAccessibleDescription(
+                "Resume Game");
+        gameMenu.add(resumeGame);
+        loadGame = new JMenuItem("Load Game");
+        loadGame.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_L, ActionEvent.CTRL_MASK));
+        loadGame.getAccessibleContext().setAccessibleDescription(
+                "Load Game");
+        gameMenu.add(loadGame);
+        menuBar.add(gameMenu);
+        helpMenu = new JMenu("Help");
+        helpMenu.setMnemonic(KeyEvent.VK_H);
+        helpMenu.getAccessibleContext().setAccessibleDescription(
+                "Help");
+        menuBar.add(helpMenu);
         this.add(menuBar);
         getContentPane().setLayout(new GridLayout(0, 8));
         JLabel turn_msg = new JLabel("Black to move");
