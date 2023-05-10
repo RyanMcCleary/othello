@@ -4,6 +4,14 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+enum game_result {
+    GAME_RESULT_BLACK_WIN = 0,
+    GAME_RESULT_WHITE_WIN,
+    GAME_RESULT_IN_PROGRESS,
+    GAME_RESULT_TIE
+};
+
+
 enum square_state {
     SQUARE_EMPTY = 0, SQUARE_BLACK, SQUARE_WHITE
 };
@@ -21,6 +29,8 @@ struct square_index {
     int row;
     int col;
 };
+
+enum game_result game_state_check_win(enum square board[8][8]) 
 
 struct game_state *game_state_alloc(size_t num_elements);
 

@@ -248,6 +248,23 @@ public class GameState {
 				}
 			}
 		}
+        if (movesList(Player.BLACK).size() == 0) {
+            if (movesList(Player.WHITE).size() == 0) {
+                if (numWhite < numBlack) {
+                    return GameResult.BLACK_WIN;
+                }
+                else if (numBlack < numWhite) {
+                    return GameResult.WHITE_WIN;
+                }
+                else {
+                    return GameResult.TIE;
+                }
+            }
+            return GameResult.IN_PROGRESS;
+        }
+        else if (movesList(Player.WHITE).size() == 0) {
+            return GameResult.IN_PROGRESS;
+        }
         if (numBlack == 0) {
             return GameResult.WHITE_WIN;
         }

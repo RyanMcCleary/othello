@@ -156,3 +156,69 @@ size_t game_state_list_moves(struct game_state *state,
 }
 
 
+/**
+ *  This function determines if the game is in progress, is a tie, or if one of the players won. 
+ */
+
+
+enum game_result game_state_check_win(enum square board[8][8]) {
+    int num_black = 0;
+    int num_white = 0;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (board[i][j] == SQUARE_BLACK) {
+                num_black++;
+            }
+            else if (board[i][j] == SQUARE_WHITE) {
+                num_white++;
+            }
+        }
+    }
+    if (game_state_list_moves(BLACK_PLAYER) == 0) {
+        if (game_state_list_moves(WHITE_PLAYER) == 0) {
+            if (num_white < num_black) {
+                return GAME_RESULT_BLACK_WIN;
+            }
+            else if (num_black < num_white) {
+                return GAME_RESULT_WHITE_WIN;
+            }
+            else {
+                return GAME_RESULT_TIE;
+            }
+        }
+        return GAME_RESULT_IN_PROGRESS;
+    }
+    else if (game_state_list_moves(WHITE_PLAYER) == 0) {
+        return GAME_RESULT_IN_PROGRESS;
+    }
+    if (num_black == 0) {
+        return GAME_RESULT_WHITE_WIN;
+    }
+    else if (num_white == 0) {
+        return GAME_RESULT_BLACK_WIN;
+    }
+    else if (num_black + num_white < 64) {
+        if (game_state_list_moves(BLACK_PLAYER) == 0 &&
+            game_state_list_moves(WHITE_PLAYER) == 0) {
+            if (num_white < num_black) {
+                return GAME_RESULT_BLACK_WIN;
+            }
+            else if (num_black < num_white) {
+                return GAME_RESULT_WHITE_WIN;
+            }
+            else {
+                return GAME_RESULT_TIE;
+            }
+        }
+        return GAME_RESULT_IN_PROGRESS;
+    }
+    else if (num_black < num_white) {
+        return GAME_RESULT_WHITE_WIN;
+    }
+    else if (num_white < num_black) {
+        return GAME_RESULT_BLACK_WIN;
+    }
+    else {
+        return GAME_RESULT_TIE;
+    }
+}
