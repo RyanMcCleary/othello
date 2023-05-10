@@ -248,7 +248,6 @@ public class GameState {
 				}
 			}
 		}
-<<<<<<< HEAD
         if (movesList(Player.BLACK).size() == 0) {
             if (movesList(Player.WHITE).size() == 0) {
                 if (numWhite < numBlack) {
@@ -275,10 +274,6 @@ public class GameState {
         else if (numBlack + numWhite < 64) {
             if (movesList(Player.BLACK).size() == 0 &&
                 movesList(Player.WHITE).size() == 0) {
-=======
-        if (numBlack + numWhite < 64) {
-            if (movesList().size() == 0) {
->>>>>>> b9027d467ba1b5a5fe243688ec791c6b71d5fc14
                 if (numWhite < numBlack) {
                     return GameResult.BLACK_WIN;
                 }
