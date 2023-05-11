@@ -3,6 +3,45 @@
 #include "pool.h"
 #include "MCTS_agent.h"
 
+
+/**
+ * Play the game all the way to the end by selecting random moves.
+ * If this results in a win for white, we return 1.0. If it results in a win 
+ * for black, return -1.0. If it results in a tie, return 0.0.
+ * (We will likely return quantities other than just 1, 0, and -1 in the future.
+ * For example, we might return some function of the ratio of white to black pieces.
+ * This is a good starting point, though.)
+ */
+static double rollout(game_tree_node *leaf) {
+    game_state state = leaf->game_state;
+    increment_visits(leaf);
+    while (checkWin(state) == GameResult.IN_PROGRESS) {
+        if (gameState.movesList().size() == 0) {
+            gameState.switchPlayer();
+        }
+        gameState.makeMove(gameState.randomValidMove());
+    }
+    switch (gameState.checkWin()) {
+        case BLACK_WIN: return -1.0;
+        case WHITE_WIN: return 1.0;
+        default: return 0.0;
+    }
+}
+    
+
+
+static game_tree_node* traverse(game_tree_node* node) {
+    increment_visits(node);
+    game_tree_node* current_node = node;
+    while (node->num_children > 0) {
+        current_node = select_child_ucb(current_node, (current_node->game_state)->current_player;
+        increment_visits(current_node);
+    }
+    return current_node;
+}
+
+
+
 static game_tree_node* select_child_ucb(game_tree_node* node, Player player) {
     if (node->num_children == 0) {
         fprintf(stderr, "selectChildUCB() called on node with no children.\n");
