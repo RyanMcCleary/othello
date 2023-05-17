@@ -72,7 +72,6 @@ public class GameState2 {
         return false;
     }
     
-
     private void updateLegalMoves() {
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
