@@ -106,7 +106,7 @@ public class OthelloUI extends JFrame {
                     // MCTSAgent mctsAgent = new MCTSAgent(gameState);
                     // gameState = mctsAgent.makeBestMove();
                     // updateTurnTracker();
-                    panel.repaint();
+                    // panel.repaint();
                 }
             }
         });
