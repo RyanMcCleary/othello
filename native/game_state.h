@@ -46,4 +46,45 @@ void game_state_make_move(struct game_state *state, int row, int col);
 
 void square_index_init(struct square_index *index, int row, int col);
 
+struct game_state *game_state_load_from_file(struct game_state *state, FILE *fp)
+{
+    char line[16];
+    fgets(line, sizeof(line), fp);
+    if (strcmp(line, "BLACK") == 0) {
+        state->current_player = PLAYER_BLACK;
+    } else if (strcmp(line, "WHITE") == 0) {
+        state->current_player = PLAYER_WHITE;
+    } else {
+        return NULL;
+    }
+    for (int row = 0; row < 8; row++) {
+        fgets(line, sizeof(line), fp);
+        for (int col = 0; col < 8; col++) {
+            switch(line[col]) {
+            case 'B':
+                state->board[row][col] = SQUARE_BLACK;
+                break;
+            case 'W':
+                state->board[row][col] = 'W';
+                break;
+            default:
+                state->board[row][col] = SQUARE_EMPTY;
+            }
+        }
+    }
+    return state;
+}
+
+struct game_state *game_state_load_from_path(struct game_state *state, char *path)
+{
+    FILE *fp = fopen(path, "r");
+    if (!fp) {
+        fprintf(stderr, "game_state_load_from_path(): error opening file %s: %s",
+            path, strerror(errno));
+        return NULL;
+    } else {
+        return game_state_load_from_file(state, fp);
+    }
+}
+
 #endif
