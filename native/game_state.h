@@ -79,7 +79,7 @@ struct game_state *game_state_load_from_path(struct game_state *state, char *pat
 {
     FILE *fp = fopen(path, "r");
     if (!fp) {
-        fprintf(stderr, "game_state_load_from_path(): error opening file %s: %s",
+        fprintf(stderr, "game_state_load_from_path(): error opening file %s: %s\n",
             path, strerror(errno));
         return NULL;
     } else {
