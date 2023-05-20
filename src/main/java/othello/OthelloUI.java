@@ -12,6 +12,35 @@ public class OthelloUI extends JFrame {
     public JCheckBox showMovesBox;
     public JLabel turnTracker;
     public ArrayList<ArrayList<JButton>> board;
+    private boolean buttonsActive = true;
+    
+    public class MCTSWorker extends SwingWorker<GameState, Object> {
+        
+        private MCTSAgent agent;
+        
+        public MCTSWorker(GameState currentGameState) {
+            this.agent = new MCTSAgent(currentGameState);
+        }
+        
+        @Override
+        public GameState doInBackground() {
+            return this.agent.makeBestMove();
+        }
+        
+        @Override
+        public void done() {
+            try {
+                gameState = get();
+                getContentPane().repaint();
+                buttonsActive = true;
+                updateTurnTracker();
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+    }
     
     public OthelloUI() {
         super("Othello");
@@ -99,13 +128,15 @@ public class OthelloUI extends JFrame {
         square.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (!buttonsActive) {
+                    return;
+                }
                 if (gameState.isValidMove(i_, j_)) {
                     gameState.makeMove(i_, j_);
                     updateTurnTracker();
                     panel.repaint();
-                    // MCTSAgent mctsAgent = new MCTSAgent(gameState);
-                    // gameState = mctsAgent.makeBestMove();
-                    // updateTurnTracker();
+                    buttonsActive = false;
+                    (new MCTSWorker(gameState)).execute();
                     panel.repaint();
                 }
             }
