@@ -6,14 +6,14 @@
 
 
 struct pool {
-    struct game_state *array;
+    struct game_tree_node *array;
     size_t capacity;
     size_t num_allocated;
 };
 
 struct pool *pool_init(struct pool *pool, size_t capacity);
 
-struct game_state *pool_alloc(struct pool *pool, size_t len);
+struct game_tree_node *pool_alloc(struct pool *pool, size_t len);
 
 void pool_destroy(struct pool *pool);
 
