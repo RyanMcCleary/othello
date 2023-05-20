@@ -61,6 +61,6 @@ void square_index_init(struct square_index *index, int row, int col);
 
 struct game_state *game_state_load_from_file(struct game_state *state, FILE *fp);
 
-struct game_state *game_state_load_from_path(struct game_state *state, char *path)
+struct game_state *game_state_load_from_path(struct game_state *state, char *path);
 
 #endif
