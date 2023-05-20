@@ -1,3 +1,6 @@
+#ifndef MCTS_AGENT_H_INCLUDED
+#define MCTS_AGENT_H_INCLUDED
+
 #include "game_state.h"
 
 struct game_tree_node {
@@ -8,3 +11,5 @@ struct game_tree_node {
     int num_visits;
     int num_children;
 };
+
+#endif
