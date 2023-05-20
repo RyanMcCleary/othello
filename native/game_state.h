@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <string.h>
 
 enum game_result {
     GAME_RESULT_BLACK_WIN = 0,
@@ -34,9 +35,13 @@ enum game_result game_state_check_win(struct game_state *state);
 
 struct game_state *game_state_alloc(size_t num_elements);
 
+size_t game_state_count_moves(enum square_state (*board)[8][8], enum player current_player);
+
 struct game_state *game_state_init(struct game_state *state);
 
-void game_state_switch_player(game_state *state);
+struct game_state *copy_make_move(struct game_state *state, struct square_index index);
+
+void game_state_switch_player(struct game_state *state);
 
 void game_state_free(struct game_state *state);
 
@@ -46,13 +51,13 @@ bool game_state_valid_move(struct game_state *state, int row, int col);
 
 void game_state_make_move(struct game_state *state, int row, int col);
 
-enum square_index game_state_random_move(game_state *state,
-                                         enum square_index *output_array);
+struct square_index game_state_random_move(struct game_state *state,
+                                         struct square_index *output_array);
 
 size_t game_state_list_moves(enum square_state (*board)[8][8], enum player current_player, 
-                             enum square_index *output_array);
+                             struct square_index *output_array);
 
-void square_index_init(enum square_index *index, int row, int col);
+void square_index_init(struct square_index *index, int row, int col);
 
 struct game_state *game_state_load_from_file(struct game_state *state, FILE *fp)
 {

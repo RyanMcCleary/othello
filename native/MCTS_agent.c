@@ -2,8 +2,16 @@
 #include <stdio.h>
 #include "pool.h"
 #include "MCTS_agent.h"
-
+#include "game_state.h"
+#include "math.h"
+static void increment_visits(struct game_tree_node *node);
+static struct game_tree_node *select_child_ucb(struct game_tree_node *node, enum player player);
 const double ucb_constant = 1.0;
+
+int main(){
+    printf("Hello Othello!");
+    return 0;
+}
 /**
  * Play the game all the way to the end by selecting random moves.
  * If this results in a win for white, we return 1.0. If it results in a win 
@@ -13,21 +21,21 @@ const double ucb_constant = 1.0;
  * This is a good starting point, though.)
  */
 double rollout(struct game_tree_node *leaf) {
-    game_state *state = leaf->state;
+    struct game_state *state = leaf->state;
     increment_visits(leaf);
     while (game_state_check_win(state) == GAME_RESULT_IN_PROGRESS) {
         if (game_state_count_moves(&state->board, state->current_player) == 0) {
             game_state_switch_player(state);
         }
-        enum square_index *output_array;
-        enum square_index random_square = game_state_random_move(state, output_array);
+        struct square_index *output_array;
+        struct square_index random_square = game_state_random_move(state, output_array);
         int row = random_square.row;
         int col = random_square.col;
         game_state_make_move(state, row, col);
     }
     switch (game_state_check_win(state)) {
-        case BLACK_WIN: return -1.0;
-        case WHITE_WIN: return 1.0;
+        case GAME_RESULT_BLACK_WIN: return -1.0;
+        case GAME_RESULT_WHITE_WIN: return 1.0;
         default: return 0.0;
     }
 }
@@ -36,9 +44,9 @@ double rollout(struct game_tree_node *leaf) {
 
 static struct game_tree_node *traverse(struct game_tree_node *node) {
     increment_visits(node);
-    game_tree_node *current_node = node;
+    struct game_tree_node *current_node = node;
     while (node->num_children > 0) {
-        current_node = select_child_ucb(current_node, current_node->game_state->current_player);
+        current_node = select_child_ucb(current_node, current_node->state->current_player);
         increment_visits(current_node);
     }
     return current_node;
@@ -49,24 +57,24 @@ static struct game_tree_node *traverse(struct game_tree_node *node) {
  *change argument to struct gtn
  *also struct on line 16. 
  */
-static game_tree_node *select_child_ucb(game_tree_node *node, enum player player) {
+static struct game_tree_node *select_child_ucb(struct game_tree_node *node, enum player player) {
     if (node->num_children == 0) {
         fprintf(stderr, "selectChildUCB() called on node with no children.\n");
         exit(1);
     }
-    game_tree_node *result = node->children[0];
+    struct game_tree_node *result = &node->children[0];
     double max_ucb_val = result->empirical_reward +
-        node->ucb_constant * sqrt(log(get_num_visits(node)) / get_num_visits(result));
+        ucb_constant * sqrt(log(node->num_visits) / result->num_visits);
     for (int i = 1; i < node->num_children; i++) {
-        game_tree_node* child = &node->children[i];
+        struct game_tree_node* child = &node->children[i];
         double ucb_val;
         if (player == PLAYER_WHITE) {
             ucb_val = child->empirical_reward +
-                node->ucb_constant * sqrt(log(get_num_visits(node)) / get_num_visits(child));
+                ucb_constant * sqrt(log(node->num_visits) / child->num_visits);
         }
         else {
             ucb_val = child->empirical_reward -
-                node->ucb_constant * sqrt(log(get_num_visits(node)) / get_num_visits(child));
+                ucb_constant * sqrt(log(node->num_visits) / child->num_visits);
         }
         if (player == PLAYER_WHITE && ucb_val > max_ucb_val) {
             max_ucb_val = ucb_val;
@@ -81,7 +89,7 @@ static game_tree_node *select_child_ucb(game_tree_node *node, enum player player
 }
 
 
-static void increment_visits(game_tree_node *node) {
+static void increment_visits(struct game_tree_node *node) {
     ++node->num_visits;
 }
  
@@ -92,14 +100,14 @@ static void increment_visits(game_tree_node *node) {
  * 
  * @param reward The numerical reward obtained from rolling out this node.
  */
-void update_reward(double reward, game_tree_node *node) {
-    node->empirical_reward = ((num_visits(node) - 1) * 
+void update_reward(double reward, struct game_tree_node *node) {
+    node->empirical_reward = ((node->num_visits - 1) * 
         node->empirical_reward + reward) / node->empirical_reward;
 }
  
     
 /** Is this node at the root of the game tree? */
-bool is_root(game_tree_node *node) {
+bool is_root(struct game_tree_node *node) {
     return (node->parent == NULL);
 }
 
@@ -123,15 +131,15 @@ void back_propegate(struct game_tree_node *leaf, double reward) {
  */
 void expand(struct pool *pool, struct game_tree_node *leaf) {
     struct game_state *state = leaf->state;
-    enum square_index *moves;
+    struct square_index *moves;
     int num_moves = game_state_list_moves(&state->board, state->current_player, moves);
+    struct game_tree_node *children = pool_alloc(pool, num_moves);
+    leaf->children = children;
     for (int i = 0; i < num_moves; i++) {
-        struct game_tree_node *child;    
-        child->parent = leaf;
-        child->state = copy_make_move(state, moves[i];
-        leaf->children[i];
+        leaf->children[i].parent = leaf;
+        leaf->children[i].state = copy_make_move(state, moves[i]);
     }
-0 }
+ }
     
     
     

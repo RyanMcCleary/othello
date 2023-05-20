@@ -144,8 +144,8 @@ void game_state_make_move(struct game_state *state, int row, int col) {
     }
 }
 
-enum square_index game_state_random_move(game_state *state,
-                                         enum square_index *output_array ) {
+struct square_index game_state_random_move(game_state *state,
+                                         struct square_index *output_array ) {
     size_t num_moves = game_state_list_moves(state->board, 
                                          state->current_player, 
                                          output_array); 
@@ -280,7 +280,7 @@ void game_state_switch_player(game_state *state) {
  * @param index: the square in which to move.
  * @return The new game state, after the move is made.
  */
-struct game_state *copy_make_move(struct game_state *state, enum square_index index) {
+struct game_state *copy_make_move(struct game_state *state, struct square_index index) {
     struct game_state *new_state = state;
     game_state_make_move(new_state, index.row, index.col);
     return new_state;

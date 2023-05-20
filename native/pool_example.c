@@ -2,7 +2,7 @@
 #include "MCTS_agent.h"
 #include "game_state.h"
 
-vint main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     struct pool node_pool;
     pool_init(&node_pool, 1024 * 1024);
