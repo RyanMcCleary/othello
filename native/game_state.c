@@ -222,3 +222,43 @@ enum game_result game_state_check_win(enum square board[8][8]) {
         return GAME_RESULT_TIE;
     }
 }
+
+struct game_state *game_state_load_from_file(struct game_state *state, FILE *fp)
+{
+    char line[16];
+    fgets(line, sizeof(line), fp);
+    if (strcmp(line, "BLACK") == 0) {
+        state->current_player = PLAYER_BLACK;
+    } else if (strcmp(line, "WHITE") == 0) {
+        state->current_player = PLAYER_WHITE;
+    } else {
+        return NULL;
+    }
+    for (size_t row = 0; row < 8; row++) {
+        fgets(line, sizeof(line), fp);
+        for (size_t col = 0; col < 8; col++) {
+            switch (line[col]) {
+            case 'B':
+                state->board[row][col] = SQUARE_BLACK;
+                break;
+            case 'W':
+                state->board[row][col] = SQUARE_WHITE;
+                break;
+            default:
+                state->board[row][col] = SQUARE_EMPTY;
+            }
+        }
+    }
+    return state;
+}
+
+struct game_state *game_state_load_from_path(struct game_state *state, char *path)
+{
+    FILE *fp = fopen(path, "r");
+    if (!fp) {
+        fprintf(stderr, "game_state_load_from_path(): could not open file %s: %s\n",
+            path, strerror(errno));
+        return NULL;
+    }
+    return game_state_load_from_file(state, fp);
+}
