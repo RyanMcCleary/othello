@@ -8,50 +8,17 @@ public class GameState2 {
     // 00...01 is the lower-right corner of the board, 00...10 is the tile to the left of it
     // 11...11 is the upper-left corner, 11...10 is the tile to the right of it
     private Player currentPlayer;
-    private long[] board;
-    private ArrayList legalMoves;
+    private long bboardB;
+    private long bboardW;
 
     public GameState2() {
         this.currentPlayer = Player.BLACK;
-        this.board = new long[2];
-        setSquare(3,4,Square.BLACK);
-        setSquare(4,3,Square.BLACK);
-        setSquare(3,3,Square.WHITE);
-        setSquare(4,4,Square.WHITE);
-        this.legalMoves = new long[]{};
-        updateLegalMoves();
-    }
-
-    public void setSquare(int row, int col, Square square) {
-        long position = indexToLong(row, col);
-        if (square == Square.BLACK) {
-            board[0] |= position;
-        }
-        else if (square == Square.WHITE) {
-            board[1] |= position;
-        }
-        else {
-            if (getSquare(row, col) == Square.BLACK) {
-                board[0] = ~((~board[0]) | position);
-            }
-            else if (getSquare(row, col) == Square.WHITE) {
-                board[1] = ~((~board[1]) | position);
-            }
-        }
-        return;
-    }
-
-    public Square getSquare(int row, int col) {
-        long position = indexToLong(row, col);
-        if ((board[0] & position) != 0) {
-            return Square.BLACK;
-        }
-        else if ((board[1] & position) != 0) {
-            return Square.WHITE;
-        }
-        else {
-            return Square.EMPTY;
-        }
+        this.bboardB = 0;
+        this.bboardW = 0;
+        this.bboardB = BoardOperations.setSquare(bboardB, bboardW, 3, 4, Square.BLACK);
+        this.bboardB = BoardOperations.setSquare(bboardB, bboardW, 4,3,Square.BLACK);
+        this.bboardW = BoardOperations.setSquare(bboardB, bboardW, 3, 3, Square.WHITE);
+        this.bboardW = BoardOperations.setSquare(bboardB, bboardW, 4,4,Square.WHITE);
     }
 
     private long indexToLong(int row, int col) {
