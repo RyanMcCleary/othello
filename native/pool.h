@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include "game_state.h"
+#include "MCTS_agent.h"
 
 
 struct pool {
