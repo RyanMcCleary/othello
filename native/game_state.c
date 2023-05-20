@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <string.h>
 #include "game_state.h"
-
+#include "debug.h"
 
 bool in_bounds(int row, int col);
 
@@ -318,8 +318,7 @@ struct game_state *game_state_load_from_path(struct game_state *state, char *pat
 {
     FILE *fp = fopen(path, "r");
     if (!fp) {
-        fprintf(stderr, "game_state_load_from_path(): could not open file %s: %s\n",
-            path, strerror(errno));
+        debug_log("could not open file '%s': %s\n", path, strerror(errno));
         return NULL;
     }
     return game_state_load_from_file(state, fp);
