@@ -1,6 +1,6 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <time.h>
 #include <string.h>
 #include "game_state.h"
 #include "debug.h"
@@ -11,11 +11,12 @@ enum square_state opposite_color(struct game_state *state);
 
 enum square_state current_color(struct game_state *state);
 
+/*
 int main()
 {
     printf("HELLO WORLD!    ");
     return 0;
-}
+}*/
 
 struct game_state *game_state_alloc(size_t num_elements) {
     return malloc(num_elements * sizeof(struct game_state));
@@ -144,14 +145,14 @@ void game_state_make_move(struct game_state *state, int row, int col) {
     }
 }
 
-struct square_index game_state_random_move(game_state *state,
+struct square_index game_state_random_move(struct game_state *state,
                                          struct square_index *output_array ) {
-    size_t num_moves = game_state_list_moves(state->board, 
+    size_t num_moves = game_state_list_moves(&state->board, 
                                          state->current_player, 
                                          output_array); 
     srand(time(NULL));
     int random_number = rand() % num_moves;
-    return output_arry[random_munber];
+    return output_array[random_number];
 }
 
 void square_index_init(struct square_index *index, int row, int col) {
@@ -264,7 +265,7 @@ enum game_result game_state_check_win(struct game_state *state) {
     }
 }
 
-void game_state_switch_player(game_state *state) {
+void game_state_switch_player(struct game_state *state) {
     if (state->current_player == PLAYER_WHITE) {
         state->current_player = PLAYER_BLACK;
 	}

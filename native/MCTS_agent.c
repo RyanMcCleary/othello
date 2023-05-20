@@ -1,5 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
+#include <math.h>
+
 #include "pool.h"
 #include "MCTS_agent.h"
 #include "game_state.h"

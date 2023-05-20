@@ -1,6 +1,7 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
+#include <stdio.h>
 #include <stddef.h>
 #include <stdbool.h>
 #include <string.h>
