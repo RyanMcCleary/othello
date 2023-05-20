@@ -30,11 +30,13 @@ struct square_index {
     int col;
 };
 
-enum game_result game_state_check_win(enum square board[8][8]) 
+enum game_result game_state_check_win(struct game_state *state); 
 
 struct game_state *game_state_alloc(size_t num_elements);
 
 struct game_state *game_state_init(struct game_state *state);
+
+void game_state_switch_player(game_state *state);
 
 void game_state_free(struct game_state *state);
 
@@ -44,6 +46,12 @@ bool game_state_valid_move(struct game_state *state, int row, int col);
 
 void game_state_make_move(struct game_state *state, int row, int col);
 
-void square_index_init(struct square_index *index, int row, int col);
+enum square_index game_state_random_move(game_state *state,
+                                         enum square_index *output_array);
+
+size_t game_state_list_moves(enum square_state (*board)[8][8], enum player current_player, 
+                             enum square_index *output_array);
+
+void square_index_init(enum square_index *index, int row, int col);
 
 #endif

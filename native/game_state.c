@@ -4,11 +4,17 @@
 #include "game_state.h"
 
 
-static bool in_bounds(int row, int col);
+bool in_bounds(int row, int col);
 
-static enum square_state opposite_color(struct game_state *state);
+enum square_state opposite_color(struct game_state *state);
 
-static enum square_state current_color(struct game_state *state);
+enum square_state current_color(struct game_state *state);
+
+int main()
+{
+    printf("HELLO WORLD!    ");
+    return 0;
+}
 
 struct game_state *game_state_alloc(size_t num_elements) {
     return malloc(num_elements * sizeof(struct game_state));
@@ -25,7 +31,7 @@ void game_state_free(struct game_state *state) {
     free(state);
 }
 
-static bool valid_direction(struct game_state *state, int row, int col,
+bool valid_direction(struct game_state *state, int row, int col,
                       int row_delta, int col_delta) {
     if (!in_bounds(row, col) ||
         !in_bounds(row + row_delta, col + col_delta)) {
@@ -50,11 +56,11 @@ static bool valid_direction(struct game_state *state, int row, int col,
     }
 }
 
-static bool in_bounds(int row, int col) {
+bool in_bounds(int row, int col) {
     return (0 <= row && row < 8 && 0 <= col && col < 8);
 }
 
-static enum square_state current_color(struct game_state *state) {	
+enum square_state current_color(struct game_state *state) {	
     if(state->current_player == PLAYER_BLACK) {
         return SQUARE_BLACK;
     }
@@ -63,7 +69,7 @@ static enum square_state current_color(struct game_state *state) {
     }
 }
 
-static enum square_state opposite_color(struct game_state *state) {	
+enum square_state opposite_color(struct game_state *state) {	
     if(state->current_player == PLAYER_BLACK) {
         return SQUARE_WHITE;
     }
@@ -102,7 +108,7 @@ void game_state_print(struct game_state *state) {
     }
 }
 
-static bool flip_direction(struct game_state *state, int row, int col,
+bool flip_direction(struct game_state *state, int row, int col,
                            int row_delta, int col_delta) {
     if (!valid_direction(state, row, col, row_delta, col_delta)) {
         return false;
@@ -137,14 +143,30 @@ void game_state_make_move(struct game_state *state, int row, int col) {
     }
 }
 
+enum square_index game_state_random_move(game_state *state,
+                                         enum square_index *output_array ) {
+    size_t num_moves = game_state_list_moves(state->board, 
+                                         state->current_player, 
+                                         output_array); 
+    srand(time(NULL));
+    int random_number = rand() % num_moves;
+    return output_arry[random_munber];
+}
+
 void square_index_init(struct square_index *index, int row, int col) {
     index->row = row;
     index->col = col;
 }
 
-size_t game_state_list_moves(struct game_state *state,
+size_t game_state_list_moves(enum square_state (*board)[8][8], enum player current_player, 
                              struct square_index *output_array) {
     size_t out_idx = 0;
+    struct game_state *state;
+    for(int i=0; i<8; i++) {
+      for(int j=0; j<8; j++) {
+        state->board[i][j] = *(board[i][j]);
+      }
+    }
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
             if (game_state_valid_move(state, row, col)) {
@@ -155,27 +177,45 @@ size_t game_state_list_moves(struct game_state *state,
     return out_idx;
 }
 
+size_t game_state_count_moves(enum square_state (*board)[8][8], enum player current_player) {
+    size_t out_idx = 0;
+    struct game_state *state;
+    for(int i=0; i<8; i++) {
+        for(int j=0; j<8; j++) {
+            state->board[i][j] = *(board[i][j]);
+        }
+    }
+    for (int row = 0; row < 8; row++) {
+        for (int col = 0; col < 8; col++) {
+            if (game_state_valid_move(state, row, col)) {
+                out_idx++;
+            }
+        }
+    }
+    return out_idx;
+}
+
+
+
 
 /**
  *  This function determines if the game is in progress, is a tie, or if one of the players won. 
  */
-
-
-enum game_result game_state_check_win(enum square board[8][8]) {
+enum game_result game_state_check_win(struct game_state *state) {
     int num_black = 0;
-    int num_white = 0;
+    int num_white = 0;    
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (board[i][j] == SQUARE_BLACK) {
+            if (state->board[i][j] == SQUARE_BLACK) {
                 num_black++;
             }
-            else if (board[i][j] == SQUARE_WHITE) {
+            else if (state->board[i][j] == SQUARE_WHITE) {
                 num_white++;
             }
         }
     }
-    if (game_state_list_moves(BLACK_PLAYER) == 0) {
-        if (game_state_list_moves(WHITE_PLAYER) == 0) {
+    if (game_state_count_moves(&state->board, PLAYER_BLACK) == 0) {
+        if (game_state_count_moves(&state->board, PLAYER_WHITE) == 0) {
             if (num_white < num_black) {
                 return GAME_RESULT_BLACK_WIN;
             }
@@ -188,7 +228,7 @@ enum game_result game_state_check_win(enum square board[8][8]) {
         }
         return GAME_RESULT_IN_PROGRESS;
     }
-    else if (game_state_list_moves(WHITE_PLAYER) == 0) {
+    else if (game_state_count_moves(&state->board, PLAYER_WHITE) == 0) {
         return GAME_RESULT_IN_PROGRESS;
     }
     if (num_black == 0) {
@@ -198,8 +238,8 @@ enum game_result game_state_check_win(enum square board[8][8]) {
         return GAME_RESULT_BLACK_WIN;
     }
     else if (num_black + num_white < 64) {
-        if (game_state_list_moves(BLACK_PLAYER) == 0 &&
-            game_state_list_moves(WHITE_PLAYER) == 0) {
+        if (game_state_count_moves(&state->board, PLAYER_BLACK) == 0 &&
+            game_state_count_moves(&state->board, PLAYER_WHITE) == 0) {
             if (num_white < num_black) {
                 return GAME_RESULT_BLACK_WIN;
             }
@@ -222,3 +262,26 @@ enum game_result game_state_check_win(enum square board[8][8]) {
         return GAME_RESULT_TIE;
     }
 }
+
+void game_state_switch_player(game_state *state) {
+    if (state->current_player == PLAYER_WHITE) {
+        state->current_player = PLAYER_BLACK;
+	}
+	else {
+		state->current_player = PLAYER_WHITE;
+	}
+}
+
+/**
+ * Make a move non-destructively. This method creates a new GameState object and calls makeMove
+ * on it, returning the result.
+ *
+ * @param index: the square in which to move.
+ * @return The new game state, after the move is made.
+ */
+struct game_state *copy_make_move(struct game_state *state, enum square_index index) {
+    struct game_state *new_state = state;
+    game_state_make_move(new_state, index.row, index.col);
+    return new_state;
+}
+    
