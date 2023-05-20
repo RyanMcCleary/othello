@@ -1,4 +1,4 @@
-#include <game_state.h>
+#include "game_state.h"
 
 struct game_tree_node {
     struct game_state *state;
