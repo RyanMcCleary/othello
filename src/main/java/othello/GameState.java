@@ -62,7 +62,8 @@ public class GameState {
 				}
 			} 
 			i++;
-		} 
+		}
+		scanner.close();
 	}
     
 	public void setSquare(int row, int col, Square s) {
