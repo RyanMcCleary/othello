@@ -56,6 +56,7 @@ public class OthelloUI extends JFrame {
         this.add(panel);
         panel.setLayout(new GridBagLayout());
         setMinimumSize(new Dimension(800,870));
+        
         return panel;
     }
 

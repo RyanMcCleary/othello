@@ -214,7 +214,7 @@ public class GameState {
 	 *  This function returns an ArrayList of Pair objects corresponding to all of the valid moves.
 	 */
 	public ArrayList<SquareIndex> movesList() {
-		ArrayList<SquareIndex> moves = new ArrayList<>();	
+		ArrayList<SquareIndex> moves = new ArrayList<>();
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (isValidMove(i, j)) {
@@ -249,56 +249,21 @@ public class GameState {
 				}
 			}
 		}
-        if (movesList(Player.BLACK).size() == 0) {
-            if (movesList(Player.WHITE).size() == 0) {
-                if (numWhite < numBlack) {
-                    return GameResult.BLACK_WIN;
-                }
-                else if (numBlack < numWhite) {
-                    return GameResult.WHITE_WIN;
-                }
-                else {
-                    return GameResult.TIE;
-                }
+        if ((movesList(Player.BLACK).size() == 0) && (movesList(Player.WHITE).size() == 0)) {
+            if (numWhite < numBlack) {
+                return GameResult.BLACK_WIN;
             }
-            return GameResult.IN_PROGRESS;
-        }
-        else if (movesList(Player.WHITE).size() == 0) {
-            return GameResult.IN_PROGRESS;
-        }
-        if (numBlack == 0) {
-            return GameResult.WHITE_WIN;
-        }
-        else if (numWhite == 0) {
-            return GameResult.BLACK_WIN;
-        }
-        else if (numBlack + numWhite < 64) {
-            if (movesList(Player.BLACK).size() == 0 &&
-                movesList(Player.WHITE).size() == 0) {
-                if (numWhite < numBlack) {
-                    return GameResult.BLACK_WIN;
-                }
-                else if (numBlack < numWhite) {
-                    return GameResult.WHITE_WIN;
-                }
-                else {
-                    return GameResult.TIE;
-                }
-            }
-			else {
-            	return GameResult.IN_PROGRESS;
+            else if (numBlack < numWhite) {
+                return GameResult.WHITE_WIN;
 			}
-        }
-        else if (numBlack < numWhite) {
-            return GameResult.WHITE_WIN;
-        }
-        else if (numWhite < numBlack) {
-            return GameResult.BLACK_WIN;
-        }
+			else {
+				return GameResult.TIE;
+			}
+		}
         else {
-            return GameResult.TIE;
-        }
-	}
+			return GameResult.IN_PROGRESS;
+		}
+    }
 
 	// Prints board state
 	public void printBoard() {
