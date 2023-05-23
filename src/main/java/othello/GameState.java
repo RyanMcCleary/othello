@@ -185,6 +185,9 @@ public class GameState {
 			setSquare(row, col, getCurrentColor());
 		}
         switchPlayer();
+		if (movesList().isEmpty()) {
+			switchPlayer();
+		}
 		return validMove;
 	}
 	

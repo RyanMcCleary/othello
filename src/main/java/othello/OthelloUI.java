@@ -136,7 +136,7 @@ public class OthelloUI extends JFrame {
                     gameState.makeMove(i_, j_);
                     updateTurnTracker();
                     panel.repaint();
-                    buttonsActive = false;
+                    buttonsActive = false;                     
                     (new MCTSWorker(gameState)).execute();
                     panel.repaint();
                 }
