@@ -94,12 +94,12 @@ public class BoardOperations {
     
     private static boolean checkE(long bboardP, long bboardO, long position) {
         boolean legal = false;
-        long EShift = position >> 1;
-        long twoRightMostCols = 0; // fix
-        long sevenLeftMostCols = 0; // fix
-        if ((position & twoRightMostCols) == 0) {
-            while (((EShift & bboardO) != 0) & ((EShift & sevenLeftMostCols) != 0)) {
-                if (((EShift >> 1) & bboardP) != 0) {
+        long shift = position >> 1;
+        long outBounds = 0; // find two right-most columns long
+        long inBounds = 0; // find seven leftmost columns long
+        if ((position & outBounds) == 0) {
+            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
+                if (((shift >> 1) & bboardP) != 0) {
                     legal = true;
                 }
             }
@@ -109,18 +109,27 @@ public class BoardOperations {
 
     private static boolean checkNE(long bboardP, long bboardO, long position) {
         boolean legal = false;
-        // fix
+        long shift = position << 7;
+        long outBounds = 0; // find two right-most columns / two top rows long
+        long inBounds = 0; // find long with right-most column and top row removed
+        if ((position & outBounds) == 0) {
+            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
+                if (((shift << 7) & bboardP) != 0) {
+                    legal = true;
+                }
+            }
+        }
         return legal;
     }
 
     private static boolean checkN(long bboardP, long bboardO, long position) {
         boolean legal = false;
-        long NShift = position << 8;
-        long twoRightMostCols = 0; // fix
-        long sevenLeftMostCols = 0; // fix
-        if ((position & twoRightMostCols) == 0) {
-            while (((NShift & bboardO) != 0) & ((NShift & sevenLeftMostCols) != 0)) {
-                if (((NShift >> 1) & bboardP) != 0) {
+        long shift = position << 8;
+        long outBounds = 0; // find two top rows long
+        long inBounds = 0; // find seven bottom rows long
+        if ((position & outBounds) == 0) {
+            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
+                if (((shift << 8) & bboardP) != 0) {
                     legal = true;
                 }
             }
@@ -130,31 +139,76 @@ public class BoardOperations {
 
     private static boolean checkNW(long bboardP, long bboardO, long position) {
         boolean legal = false;
-        // fix
+        long shift = position << 9;
+        long outBounds = 0; // find two left-most columns / two top rows long
+        long inBounds = 0; // find long with left-most column and top row removed
+        if ((position & outBounds) == 0) {
+            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
+                if (((shift << 9) & bboardP) != 0) {
+                    legal = true;
+                }
+            }
+        }
         return legal;
     }
 
     private static boolean checkW(long bboardP, long bboardO, long position) {
         boolean legal = false;
-        // fix
+        long shift = position << 1;
+        long outBounds = 0; // find two left-most columns long
+        long inBounds = 0; // find seven right-most columns long
+        if ((position & outBounds) == 0) {
+            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
+                if (((shift << 1) & bboardP) != 0) {
+                    legal = true;
+                }
+            }
+        }
         return legal;
     }
 
     private static boolean checkSW(long bboardP, long bboardO, long position) {
         boolean legal = false;
-        // fix
+        long shift = position >> 7;
+        long outBounds = 0; // find two left-most columns / two bottom rows long
+        long inBounds = 0; // find long with left-most column and bottom row removed
+        if ((position & outBounds) == 0) {
+            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
+                if (((shift >> 7) & bboardP) != 0) {
+                    legal = true;
+                }
+            }
+        }
         return legal;
     }
 
     private static boolean checkS(long bboardP, long bboardO, long position) {
         boolean legal = false;
-        // fix
+        long shift = position >> 8;
+        long outBounds = 0; // find two bottom rows long
+        long inBounds = 0; // find seven top tows long
+        if ((position & outBounds) == 0) {
+            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
+                if (((shift >> 8) & bboardP) != 0) {
+                    legal = true;
+                }
+            }
+        }
         return legal;
     }
 
     private static boolean checkSE(long bboardP, long bboardO, long position) {
         boolean legal = false;
-        // fix
+        long shift = position >> 9;
+        long outBounds = 0; // find two left-most columns / two bottom rows long
+        long inBounds = 0; // find long with left-most column and bottom row removed
+        if ((position & outBounds) == 0) {
+            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
+                if (((shift >> 9) & bboardP) != 0) {
+                    legal = true;
+                }
+            }
+        }
         return legal;
     }
 
