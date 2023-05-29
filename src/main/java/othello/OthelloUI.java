@@ -56,6 +56,7 @@ public class OthelloUI extends JFrame {
         this.add(panel);
         panel.setLayout(new GridBagLayout());
         setMinimumSize(new Dimension(800,870));
+        
         return panel;
     }
 
@@ -135,7 +136,7 @@ public class OthelloUI extends JFrame {
                     gameState.makeMove(i_, j_);
                     updateTurnTracker();
                     panel.repaint();
-                    buttonsActive = false;
+                    buttonsActive = false;                     
                     (new MCTSWorker(gameState)).execute();
                     panel.repaint();
                 }
