@@ -142,28 +142,37 @@ void expand(struct pool *pool, struct game_tree_node *leaf) {
         leaf->children[i].state = copy_make_move(state, moves[i]);
     }
  }
+  
+  
+  
+static struct game_state *make_best_move(struct pool *pool, struct game_state *state) {
+    struct game_tree_node *root;
+    root->state = state;
+    root->children = NULL;
+    root->parent = NULL;
+    root->num_visits = 0;
+    root->num_children = 0;
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    for (int i = 0; i < 500000; i++) {
+        struct game_tree_node *leaf = traverse(root);
+        expand(pool, leaf);
+        
+        for (int j = 0; j < leaf->num_children; j++) {
+            double reward = rollout(&leaf->children[j]);
+            back_propegate(&leaf->children[j], reward);
+        }
+    }
+    struct game_tree_node *children = root->children;
+    if (root->children == NULL) {
+        return NULL;
+    }
+    struct game_tree_node *best_child = &children[0];
+    for (int i = 1; i < root->num_children; i++) {
+        struct game_tree_node *current_child = &children[i];
+        if (current_child->empirical_reward > best_child->empirical_reward) {
+            best_child = current_child;
+        }
+    }
+    return best_child->state;
+}
     
