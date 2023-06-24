@@ -6,26 +6,26 @@ public class GameState2 {
 
     // 00...01 is the lower-right corner of the board, 00...10 is the tile to the left of it
     // 10...00 is the upper-left corner, 01...00 is the tile to the right of it
-    private Player currentPlayer;
     private long bboardB;
     private long bboardW;
 
     public GameState2() {
-        this.currentPlayer = Player.BLACK;
         this.bboardB = 0x0000000810000000L;
         this.bboardW = 0x0000001008000000L;
     }
 
-    public void switchPlayer() {
+    public Player switchPlayer(Player currentPlayer) {
+        Player newPlayer;
         if (currentPlayer == Player.BLACK) {
-            currentPlayer = Player.WHITE;
+            newPlayer = Player.WHITE;
         }
         else {
-            currentPlayer = Player.BLACK;
+            newPlayer = Player.BLACK;
         }
+        return newPlayer;
     }
 
-    public boolean setRay(long position, int vert, int hori) {
+    public boolean flipRay(long position, int vert, int hori, Player currentPlayer) {
         boolean moveMade = false;
         long shift = 0L;
         if (currentPlayer == Player.BLACK) {
@@ -185,25 +185,26 @@ public class GameState2 {
         return moveMade;
     }
 
-    public boolean makeMove(long position) {
+    public Player makeMove(long position, Player currentPlayer) {
+        Player player = currentPlayer;
         boolean moveMade = false;
         if (BoardOperations.isVacant(bboardB, bboardW, position)) {
             for (int vert = -1; vert < 1; vert++) {
                 for (int hori = -1; hori < 1; hori++) {
-                    if (setRay(position, vert, hori)) {
+                    if (flipRay(position, vert, hori, player)) {
                         moveMade = true;
                     }
                 }
             }
             if (moveMade) {
                 if ((currentPlayer == Player.BLACK) & (BoardOperations.getLegalMoves(bboardW, bboardB) != 0L)) {
-                    switchPlayer();
+                    player = switchPlayer(currentPlayer);
                 }
                 else if ((currentPlayer == Player.WHITE) & (BoardOperations.getLegalMoves(bboardB, bboardW) != 0L)) {
-                    switchPlayer();
+                    player = switchPlayer(currentPlayer);
                 }
             }
         }
-        return moveMade;
+        return currentPlayer;
     }
 }
