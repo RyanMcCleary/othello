@@ -2,21 +2,25 @@ package othello;
 
 public class BoardOperations {
 
+    public static Square getSquare(long bboardB, long bboardW, long position) {
+            Square square = Square.EMPTY;
+            if ((bboardB & position) != 0L) {
+                square = Square.BLACK;
+            }
+            else if ((bboardW & position) != 0L) {
+                square = Square.WHITE;
+            }
+            return square;
+        }
+
     public static Square getSquare(long bboardB, long bboardW, int row, int col) {
-        Square square = Square.EMPTY;
         long position = indexToLong(row, col);
-        if ((bboardB & position) != 0) {
-            square = Square.BLACK;
-        }
-        else if ((bboardW & position) != 0) {
-            square = Square.WHITE;
-        }
+        Square square = getSquare(bboardB, bboardW, position);
         return square;
     }
 
-    public static long setSquare(long bboardB, long bboardW, int row, int col, Square square) {
-        long position = indexToLong(row, col);
-        long newBoard = 0;
+    public static long setSquare(long bboardB, long bboardW, long position, Square square) {
+        long newBoard = 0L;
         if (square == Square.BLACK) {
             newBoard = bboardB | position;
         }
@@ -24,17 +28,23 @@ public class BoardOperations {
             newBoard = bboardW | position;
         }
         else {
-            if (getSquare(bboardB, bboardW, row, col) == Square.BLACK) {
+            if (getSquare(bboardB, bboardW, position) == Square.BLACK) {
                 newBoard = ~((~bboardB) | position);
             }
-            else if (getSquare(bboardB, bboardW, row, col) == Square.WHITE) {
+            else if (getSquare(bboardB, bboardW, position) == Square.WHITE) {
                 newBoard = ~((~bboardW) | position);
             }
         }
         return newBoard;
     }
 
-    private static long setSquare(long bboard, long position) {
+    public static long setSquare(long bboardB, long bboardW, int row, int col, Square square) {
+        long position = indexToLong(row, col);
+        long newBoard = setSquare(bboardB, bboardW, position, square);
+        return newBoard;
+    }
+
+    public static long setSquare(long bboard, long position) {
         return bboard | position;
     }
 
@@ -47,10 +57,10 @@ public class BoardOperations {
         for (int i=1; i<=8; i++) {
             for (int j=1; j<=8; j++) {
                 long position = indexToLong(i,j);
-                if ((bboardB & position) != 0) {
+                if ((bboardB & position) != 0L) {
                     board[i][j] = Square.BLACK;
                 }
-                else if ((bboardW & position) != 0) {
+                else if ((bboardW & position) != 0L) {
                     board[i][j] = Square.WHITE;
                 }
                 else {
@@ -63,18 +73,18 @@ public class BoardOperations {
     
     // bboardP is the current player's bitboard and bboardO is the opponent's bitboard
     public static long getLegalMoves(long bboardP, long bboardO) {
-        long legalMoves = 0;
-        long position = 1;
+        long legalMoves = 0L;
+        long position = 1L;
         for (int i = 1; i < 64; i++) {
             if (isLegal(bboardP, bboardO, position)) {
                     legalMoves = setSquare(legalMoves, position);
-                }
-            position = position << 1;
             }
+            position = position << 1;
+        }
         return legalMoves;
     }
 
-    private static boolean isLegal(long bboardP, long bboardO, long position) {
+    public static boolean isLegal(long bboardP, long bboardO, long position) {
         boolean legal = false;
         if (isVacant(bboardP, bboardO, position)) {
             if (checkE(bboardP, bboardO, position) | checkNE(bboardP, bboardO, position) | checkN(bboardP, bboardO, position) | checkNW(bboardP, bboardO, position) | checkW(bboardP, bboardO, position) | checkSW(bboardP, bboardO, position) | checkS(bboardP, bboardO, position) | checkSE(bboardP, bboardO, position)) {
@@ -84,22 +94,23 @@ public class BoardOperations {
         return legal;
     }
     
-    private static boolean isVacant(long bboardP, long bboardO, long position) {
+    public static boolean isVacant(long bboardP, long bboardO, long position) {
         boolean legal = false;
-        if ((position & (bboardP | bboardO)) == 0) {
+        if ((position & (bboardP | bboardO)) == 0L) {
             legal = true;
         }
         return legal;
     }
     
-    private static boolean checkE(long bboardP, long bboardO, long position) {
+    public static boolean checkE(long bboardP, long bboardO, long position) {
         boolean legal = false;
         long shift = position >> 1;
-        long outBounds = 0; // find two right-most columns long
-        long inBounds = 0; // find seven leftmost columns long
-        if ((position & outBounds) == 0) {
-            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
-                if (((shift >> 1) & bboardP) != 0) {
+        long outBounds = 0x0303030303030303L; // two right-most columns 1s
+        long inBounds = 0xFEFEFEFEFEFEFEFEL; // right-most column 0s
+        if ((position & outBounds) == 0L) {
+            while ((shift & bboardO & inBounds) != 0L) {
+                shift = shift >> 1;
+                if ((shift & bboardP) != 0L) {
                     legal = true;
                 }
             }
@@ -107,14 +118,15 @@ public class BoardOperations {
         return legal;
     }
 
-    private static boolean checkNE(long bboardP, long bboardO, long position) {
+    public static boolean checkNE(long bboardP, long bboardO, long position) {
         boolean legal = false;
         long shift = position << 7;
-        long outBounds = 0; // find two right-most columns / two top rows long
-        long inBounds = 0; // find long with right-most column and top row removed
-        if ((position & outBounds) == 0) {
-            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
-                if (((shift << 7) & bboardP) != 0) {
+        long outBounds = 0x0303030303030000L; // two right-most columns / two top rows 1s
+        long inBounds = 0x00FEFEFEFEFEFEFEL; // right-most column and top row 0s
+        if ((position & outBounds) == 0L) {
+            while ((shift & bboardO & inBounds) != 0L) {
+                shift = shift << 7;
+                if ((shift & bboardP) != 0L) {
                     legal = true;
                 }
             }
@@ -122,14 +134,15 @@ public class BoardOperations {
         return legal;
     }
 
-    private static boolean checkN(long bboardP, long bboardO, long position) {
+    public static boolean checkN(long bboardP, long bboardO, long position) {
         boolean legal = false;
         long shift = position << 8;
-        long outBounds = 0; // find two top rows long
-        long inBounds = 0; // find seven bottom rows long
-        if ((position & outBounds) == 0) {
-            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
-                if (((shift << 8) & bboardP) != 0) {
+        long outBounds = 0xFFFF000000000000L; // two top rows 1s
+        long inBounds = 0x00FFFFFFFFFFFFFFL; // top row 0s
+        if ((position & outBounds) == 0L) {
+            while ((shift & bboardO & inBounds) != 0L) {
+                shift = shift << 8;
+                if ((shift & bboardP) != 0L) {
                     legal = true;
                 }
             }
@@ -137,14 +150,15 @@ public class BoardOperations {
         return legal;
     }
 
-    private static boolean checkNW(long bboardP, long bboardO, long position) {
+    public static boolean checkNW(long bboardP, long bboardO, long position) {
         boolean legal = false;
         long shift = position << 9;
-        long outBounds = 0; // find two left-most columns / two top rows long
-        long inBounds = 0; // find long with left-most column and top row removed
-        if ((position & outBounds) == 0) {
-            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
-                if (((shift << 9) & bboardP) != 0) {
+        long outBounds = 0xFFFFC0C0C0C0C0C0L; // two left-most columns / two top rows 1s
+        long inBounds = 0x007F7F7F7F7F7F7FL; // left-most column / top row 0s
+        if ((position & outBounds) == 0L) {
+            while ((shift & bboardO & inBounds) != 0L) {
+                shift = shift << 9;
+                if ((shift & bboardP) != 0L) {
                     legal = true;
                 }
             }
@@ -152,14 +166,15 @@ public class BoardOperations {
         return legal;
     }
 
-    private static boolean checkW(long bboardP, long bboardO, long position) {
+    public static boolean checkW(long bboardP, long bboardO, long position) {
         boolean legal = false;
         long shift = position << 1;
-        long outBounds = 0; // find two left-most columns long
-        long inBounds = 0; // find seven right-most columns long
-        if ((position & outBounds) == 0) {
-            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
-                if (((shift << 1) & bboardP) != 0) {
+        long outBounds = 0xC0C0C0C0C0C0C0C0L; // two left-most columns 1s
+        long inBounds = 0x7F7F7F7F7F7F7F7FL; //  left-most column 0s
+        if ((position & outBounds) == 0L) {
+            while ((shift & bboardO & inBounds) != 0L) {
+                shift = shift << 1;
+                if ((shift & bboardP) != 0L) {
                     legal = true;
                 }
             }
@@ -167,14 +182,15 @@ public class BoardOperations {
         return legal;
     }
 
-    private static boolean checkSW(long bboardP, long bboardO, long position) {
+    public static boolean checkSW(long bboardP, long bboardO, long position) {
         boolean legal = false;
         long shift = position >> 7;
-        long outBounds = 0; // find two left-most columns / two bottom rows long
-        long inBounds = 0; // find long with left-most column and bottom row removed
-        if ((position & outBounds) == 0) {
-            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
-                if (((shift >> 7) & bboardP) != 0) {
+        long outBounds = 0xC0C0C0C0C0C0FFFFL; // two left-most columns / two bottom rows 1s
+        long inBounds = 0x7F7F7F7F7F7F7F00L; // left-most column / bottom row 0s
+        if ((position & outBounds) == 0L) {
+            while ((shift & bboardO & inBounds) != 0L) {
+                shift = shift >> 7;
+                if ((shift & bboardP) != 0L) {
                     legal = true;
                 }
             }
@@ -182,14 +198,15 @@ public class BoardOperations {
         return legal;
     }
 
-    private static boolean checkS(long bboardP, long bboardO, long position) {
+    public static boolean checkS(long bboardP, long bboardO, long position) {
         boolean legal = false;
         long shift = position >> 8;
-        long outBounds = 0; // find two bottom rows long
-        long inBounds = 0; // find seven top tows long
-        if ((position & outBounds) == 0) {
-            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
-                if (((shift >> 8) & bboardP) != 0) {
+        long outBounds = 0x000000000000FFFFL; // two bottom rows 1s
+        long inBounds = 0xFFFFFFFFFFFFFF00L; // bottom row 0s
+        if ((position & outBounds) == 0L) {
+            while ((shift & bboardO & inBounds) != 0L) {
+                shift = shift >> 8;
+                if ((shift & bboardP) != 0L) {
                     legal = true;
                 }
             }
@@ -197,19 +214,37 @@ public class BoardOperations {
         return legal;
     }
 
-    private static boolean checkSE(long bboardP, long bboardO, long position) {
+    public static boolean checkSE(long bboardP, long bboardO, long position) {
         boolean legal = false;
         long shift = position >> 9;
-        long outBounds = 0; // find two left-most columns / two bottom rows long
-        long inBounds = 0; // find long with left-most column and bottom row removed
-        if ((position & outBounds) == 0) {
-            while (((shift & bboardO) != 0) & ((shift & inBounds) != 0)) {
-                if (((shift >> 9) & bboardP) != 0) {
+        long outBounds = 0x030303030303FFFFL; // two right-most columns / two bottom rows 1s
+        long inBounds = 0xFEFEFEFEFEFEFE00L; // right-most column / bottom row 0s
+        if ((position & outBounds) == 0L) {
+            while ((shift & bboardO & inBounds) != 0L) {
+                shift = shift >> 9;
+                if ((shift & bboardP) != 0L) {
                     legal = true;
                 }
             }
         }
         return legal;
+    }
+
+    public static GameResult checkStatus(long bboardB, long bboardW) {
+        GameResult status = GameResult.IN_PROGRESS;
+        long legalMoves = getLegalMoves(bboardB, bboardW) | getLegalMoves(bboardW, bboardB);
+        if (legalMoves == 0L) {
+            if (Long.bitCount(bboardB) > Long.bitCount(bboardW)) {
+                status = GameResult.BLACK_WIN;
+            }
+            else if (Long.bitCount(bboardB) < Long.bitCount(bboardW)) {
+                status = GameResult.WHITE_WIN;
+            }
+            else {
+                status = GameResult.TIE;
+            }
+        }
+        return status;
     }
 
 }
