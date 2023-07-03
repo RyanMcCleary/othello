@@ -12,7 +12,7 @@ public class Main {
             
             @Override
             public void run() {
-                OthelloUI ui = new OthelloUI();
+                OthelloUI2 ui = new OthelloUI2();
                 ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 ui.setVisible(true);
             }

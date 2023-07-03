@@ -6,8 +6,8 @@ public class GameState2 {
 
     // 00...01 is the lower-right corner of the board, 00...10 is the tile to the left of it
     // 10...00 is the upper-left corner, 01...00 is the tile to the right of it
-    private long bboardB;
-    private long bboardW;
+    public long bboardB;
+    public long bboardW;
 
     public GameState2() {
         this.bboardB = 0x0000000810000000L;
@@ -205,6 +205,29 @@ public class GameState2 {
                 }
             }
         }
-        return currentPlayer;
+        return player;
+    }
+
+    public boolean makeMove2(long position, Player currentPlayer) {
+        Player player = currentPlayer;
+        boolean moveMade = false;
+        if (BoardOperations.isVacant(bboardB, bboardW, position)) {
+            for (int vert = -1; vert < 1; vert++) {
+                for (int hori = -1; hori < 1; hori++) {
+                    if (flipRay(position, vert, hori, player)) {
+                        moveMade = true;
+                    }
+                }
+            }
+            if (moveMade) {
+                if ((currentPlayer == Player.BLACK) & (BoardOperations.getLegalMoves(bboardW, bboardB) != 0L)) {
+                    player = switchPlayer(currentPlayer);
+                }
+                else if ((currentPlayer == Player.WHITE) & (BoardOperations.getLegalMoves(bboardB, bboardW) != 0L)) {
+                    player = switchPlayer(currentPlayer);
+                }
+            }
+        }
+        return moveMade;
     }
 }

@@ -2,6 +2,19 @@ package othello;
 
 public class BoardOperations {
 
+    public static void printBoard(long bboard) {
+        String string = new String();
+        string = Long.toBinaryString(bboard);
+
+        System.out.print(string);
+
+        for (int i=0; i<8; i++) {
+            System.out.print(string.substring(8*i, 8*(i+1)) + "\n");
+        }
+
+        return;
+    }
+
     public static Square getSquare(long bboardB, long bboardW, long position) {
             Square square = Square.EMPTY;
             if ((bboardB & position) != 0L) {
@@ -48,7 +61,7 @@ public class BoardOperations {
         return bboard | position;
     }
 
-    private static long indexToLong(int row, int col) {
+    public static long indexToLong(int row, int col) {
         return 1L << ((8 * (col - 1)) + (row - 1));
     }
 
@@ -87,9 +100,24 @@ public class BoardOperations {
     public static boolean isLegal(long bboardP, long bboardO, long position) {
         boolean legal = false;
         if (isVacant(bboardP, bboardO, position)) {
-            if (checkE(bboardP, bboardO, position) | checkNE(bboardP, bboardO, position) | checkN(bboardP, bboardO, position) | checkNW(bboardP, bboardO, position) | checkW(bboardP, bboardO, position) | checkSW(bboardP, bboardO, position) | checkS(bboardP, bboardO, position) | checkSE(bboardP, bboardO, position)) {
+            if (checkE(bboardP, bboardO, position) || checkNE(bboardP, bboardO, position) || checkN(bboardP, bboardO, position) || checkNW(bboardP, bboardO, position) || checkW(bboardP, bboardO, position) || checkSW(bboardP, bboardO, position) || checkS(bboardP, bboardO, position) || checkSE(bboardP, bboardO, position)) {
                 legal = true;
             }
+        }
+        return legal;
+    }
+
+    public static boolean isLegal(long bboardP, long bboardO, int row, int col) {
+        return isLegal(bboardP, bboardO, indexToLong(row, col));
+    }
+
+    public static boolean isLegal(long bboardB, long bboardW, Player currentPlayer, int row, int col) {
+        boolean legal = false;
+        if (currentPlayer == Player.BLACK) {
+            legal = isLegal(bboardB, bboardW, row, col);
+        }
+        else {
+            legal = isLegal(bboardW, bboardB, row, col);
         }
         return legal;
     }
