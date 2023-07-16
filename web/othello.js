@@ -8,7 +8,7 @@ for (let i = 0; i < boardSize; i++) {
         cell.setAttribute("tabIndex", "0");
         if ((i === 3 && j === 3) || (i === 4 && j === 4)) {
             cell.innerHTML=`<svg height="100" width="100">
-            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="white" />
+            <circle cx="50" cy="50" r="45" stroke="white" stroke-width="3" fill="white" />
           </svg>`;
             /*cell.classList.add('occupied', 'white');*/
             cell.style.backgroundColor = 'green';
@@ -17,7 +17,7 @@ for (let i = 0; i < boardSize; i++) {
         else if ((i === 3 && j === 4) || (i === 4 && j === 3)) {
             /*            cell.classList.add('occupied', 'black');*/
             cell.innerHTML=`<svg height="100" width="100">
-            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="black" />
+            <circle cx="50" cy="50" r="45" stroke="black" stroke-width="3" fill="black" />
             </svg>`;
             cell.setAttribute('title', 'black');
             cell.style.backgroundColor = 'green';
@@ -37,7 +37,7 @@ function play(cell) {
     }
     /*cell.classList.add('occupied', currentPlayer);*/
     cell.innerHTML=`<svg height="100" width="100">
-            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill=${currentPlayer} />
+            <circle cx="50" cy="50" r="45" stroke=${currentPlayer} stroke-width="3" fill=${currentPlayer} />
             </svg>`;
  cell.setAttribute('title', currentPlayer);
     cell.style.backgroundColor = 'green';
