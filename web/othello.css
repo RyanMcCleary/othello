@@ -4,7 +4,7 @@ body {
 
 h1, p {
      text-align: center;
-     font-size: 30px;
+     font-size: 30px;   
 }
         
 table {
@@ -38,10 +38,10 @@ td:before {
     border-radius: 50%;
 }
         
-.black:before {
+.black::before {
     background-color: black;
 }
         
-.white:before {
+.white::before {
     background-color: white;
 }

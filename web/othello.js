@@ -7,14 +7,20 @@ for (let i = 0; i < boardSize; i++) {
         const cell = row.insertCell();
         cell.setAttribute("tabIndex", "0");
         if ((i === 3 && j === 3) || (i === 4 && j === 4)) {
-            cell.classList.add('occupied', 'white');
+            cell.innerHTML=`<svg height="100" width="100">
+            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="white" />
+          </svg>`;
+            /*cell.classList.add('occupied', 'white');*/
             cell.style.backgroundColor = 'green';
-            cell.ariaLabel = "white";
+            cell.setAttribute('title', 'white');
         }
         else if ((i === 3 && j === 4) || (i === 4 && j === 3)) {
-            cell.classList.add('occupied', 'black');
+            /*            cell.classList.add('occupied', 'black');*/
+            cell.innerHTML=`<svg height="100" width="100">
+            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="black" />
+            </svg>`;
+            cell.setAttribute('title', 'black');
             cell.style.backgroundColor = 'green';
-            cell.ariaLabel = "black";
         }
         else {
             cell.onclick = () => play(cell);
@@ -26,10 +32,14 @@ let currentPlayer = 'black';
 document.getElementById("currentplayer").innerHTML = "Black to Go";
 
 function play(cell) {
-    if (cell.classList.contains('black') || cell.classList.contains('white')) {
+    if (cell.title === "black" || cell.title === "white") {
         return;
     }
-    cell.classList.add('occupied', currentPlayer);
+    /*cell.classList.add('occupied', currentPlayer);*/
+    cell.innerHTML=`<svg height="100" width="100">
+            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill=${currentPlayer} />
+            </svg>`;
+ cell.setAttribute('title', currentPlayer);
     cell.style.backgroundColor = 'green';
     if (currentPlayer === 'black') {
         currentPlayer = 'white';
