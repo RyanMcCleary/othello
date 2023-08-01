@@ -14,7 +14,7 @@ for (let i = 0; i < boardSize; i++) {
     const row = htmlBoard.insertRow();
     for (let j = 0; j < boardSize; j++) {
         const cell = row.insertCell();
-        cell.setAttribute("tabIndex", "0");
+        //cell.setAttribute("tabIndex", "0");
         cell.addEventListener('keypress', function(e) {
         if (e.key === "Enter" || e.key === "Spacebar") {
             cell.click();
@@ -46,24 +46,30 @@ let currentPlayer = 'black';
 document.getElementById("currentplayer").innerHTML = "Black to Go";
 
 function play(cell) {
-    if (cell.title === "black" || cell.title === "white") {
+    const col = cell.cellIndex;
+    //alert(`cell col = ${col}`);
+    const row = cell.parentNode.rowIndex;
+    if (cell.innerHTML !== "") {
         return;
     }
     
     cell.innerHTML=`<svg role="img" height="100" width="100" title="${currentPlayer}">
     <desc>${currentPlayer}</desc>
-    <circle cx="50" cy="50" r="45" stroke="black" stroke-width="3" fill=${currentPlayer} />
+    <circle cx="50" cy="50" r="45" stroke=${currentPlayer} stroke-width="3" fill=${currentPlayer} />
     </svg>`;
-    cell.setAttribute('title', currentPlayer);
+    //alert(`cell col = ${col} and row = ${row}`);
     cell.style.backgroundColor = 'green';
     if (currentPlayer === 'black') {
+        board[col][row] = SquareState.BLACK; 
         currentPlayer = 'white';
         document.getElementById("currentplayer").innerHTML = "White to Go";
     }
     else {
+        board[col][row] = SquareState.WHITE;
         currentPlayer = 'black';
         document.getElementById("currentplayer").innerHTML = "Black to Go";
     }
+
 }
 
     
